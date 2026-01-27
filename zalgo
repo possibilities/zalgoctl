@@ -1,0 +1,605 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["click>=8.0"]
+# ///
+"""The best damn Zalgo text generator on the planet."""
+
+import json
+import math
+import random
+import sys
+import unicodedata
+
+import click
+
+# ---------------------------------------------------------------------------
+# Unicode combining-character database
+# ---------------------------------------------------------------------------
+
+# Core block: Combining Diacritical Marks U+0300-U+036F
+CORE_ABOVE = [
+    *range(0x0300, 0x0316),  # 0x0300-0x0315
+    0x031A, 0x031B,
+    *range(0x033D, 0x0345),  # 0x033D-0x0344
+    0x0346,
+    *range(0x034A, 0x034D),  # 0x034A-0x034C
+    *range(0x0350, 0x0353),  # 0x0350-0x0352
+    0x0357, 0x0358, 0x035B,
+    *range(0x0363, 0x0370),  # 0x0363-0x036F
+]
+
+CORE_BELOW = [
+    *range(0x0316, 0x031A),  # 0x0316-0x0319
+    *range(0x031C, 0x0334),  # 0x031C-0x0333
+    *range(0x0339, 0x033D),  # 0x0339-0x033C
+    0x0345,
+    *range(0x0347, 0x034A),  # 0x0347-0x0349
+    0x034D, 0x034E,
+    *range(0x0353, 0x0357),  # 0x0353-0x0356
+    0x0359, 0x035A,
+]
+
+CORE_MIDDLE = [
+    *range(0x0334, 0x0339),  # 0x0334-0x0338
+    *range(0x035C, 0x0363),  # 0x035C-0x0362
+]
+
+# Extended block: Combining Diacritical Marks Extended U+1AB0-U+1AFF
+EXTENDED_ABOVE = [*range(0x1AB0, 0x1ABF)]
+EXTENDED_BELOW = [*range(0x1ABF, 0x1ACF)]
+EXTENDED_MIDDLE: list[int] = []
+
+# Supplement block: Combining Diacritical Marks Supplement U+1DC0-U+1DFF
+SUPPLEMENT_ABOVE = [*range(0x1DC0, 0x1DE7)]
+SUPPLEMENT_BELOW = [*range(0x1DE7, 0x1DF0)]
+SUPPLEMENT_MIDDLE = [*range(0x1DF0, 0x1E00)]
+
+# Symbols block: Combining Diacritical Marks for Symbols U+20D0-U+20FF
+SYMBOLS_ABOVE = [0x20D0, 0x20D1, 0x20D6, 0x20D7, 0x20DB, 0x20DC, 0x20E1]
+SYMBOLS_BELOW = [0x20E5, 0x20E8, 0x20EC, 0x20ED, 0x20EE, 0x20EF]
+SYMBOLS_MIDDLE = [
+    0x20D2, 0x20D3, 0x20D8, 0x20D9, 0x20DA, 0x20DD, 0x20DE, 0x20DF, 0x20E0,
+    0x20E2, 0x20E3, 0x20E4, 0x20E6, 0x20E7, 0x20E9, 0x20EA, 0x20EB,
+    0x20F0,
+]
+
+# Mark subcategory filters (codepoints from core block)
+MARK_FILTERS: dict[str, set[int]] = {
+    "accents": {
+        0x0300, 0x0301, 0x0302, 0x0303, 0x0304, 0x0305, 0x0306, 0x0307,
+        0x0308, 0x0309, 0x030A, 0x030B, 0x030C, 0x030D, 0x030E, 0x030F,
+        0x0310, 0x0311, 0x0312, 0x0313, 0x0314, 0x0315,
+        0x031A, 0x031B, 0x033D, 0x033E, 0x033F, 0x0340, 0x0341, 0x0342,
+        0x0343, 0x0344, 0x0346,
+    },
+    "dots": {
+        0x0307, 0x0308, 0x0309, 0x030A, 0x0323, 0x0324, 0x0325, 0x0326,
+        0x0358,
+    },
+    "lines": {
+        0x0305, 0x030D, 0x030E, 0x030F, 0x0310, 0x0320, 0x0321, 0x0322,
+        0x0332, 0x0333, 0x0334, 0x0335, 0x0336, 0x0337, 0x0338,
+    },
+    "letters": {*range(0x0363, 0x0370)},
+    "arrows": {0x034A, 0x034B, 0x034C, 0x0350, 0x0351, 0x0352},
+    "hooks": {
+        0x0312, 0x0313, 0x0314, 0x0315, 0x031B, 0x0321, 0x0322, 0x0326,
+        0x0327, 0x0328,
+    },
+}
+
+BLOCKS = {
+    "core": (CORE_ABOVE, CORE_BELOW, CORE_MIDDLE),
+    "extended": (EXTENDED_ABOVE, EXTENDED_BELOW, EXTENDED_MIDDLE),
+    "supplement": (SUPPLEMENT_ABOVE, SUPPLEMENT_BELOW, SUPPLEMENT_MIDDLE),
+    "symbols": (SYMBOLS_ABOVE, SYMBOLS_BELOW, SYMBOLS_MIDDLE),
+}
+
+# ---------------------------------------------------------------------------
+# Style presets
+# ---------------------------------------------------------------------------
+
+STYLES: dict[str, dict] = {
+    "whisper":     {"up": 1,   "mid": 0,  "down": 1,   "variance": 0.3},
+    "subtle":      {"up": 2,   "mid": 1,  "down": 2,   "variance": 0.3},
+    "moderate":    {"up": 5,   "mid": 2,  "down": 5,   "variance": 0.5},
+    "heavy":       {"up": 12,  "mid": 3,  "down": 12,  "variance": 0.6},
+    "extreme":     {"up": 30,  "mid": 5,  "down": 30,  "variance": 0.7},
+    "demonic":     {"up": 60,  "mid": 8,  "down": 60,  "variance": 0.8},
+    "void":        {"up": 100, "mid": 10, "down": 100,  "variance": 1.0},
+    "up-only":     {"up": 15,  "mid": 0,  "down": 0,   "variance": 0.5},
+    "down-only":   {"up": 0,   "mid": 0,  "down": 15,  "variance": 0.5},
+    "mid-only":    {"up": 0,   "mid": 8,  "down": 0,   "variance": 0.5},
+    "ascend":      {"up": 25,  "mid": 2,  "down": 3,   "variance": 0.5},
+    "descend":     {"up": 3,   "mid": 2,  "down": 25,  "variance": 0.5},
+}
+
+# ---------------------------------------------------------------------------
+# Pattern functions  (pos, total, freq, phase) -> float in [0, 1]
+# ---------------------------------------------------------------------------
+
+def _pat_random(_pos: int, _total: int, _freq: float, _phase: float) -> float:
+    return 1.0
+
+
+def _pat_wave(pos: int, total: int, freq: float, phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return (math.sin(2 * math.pi * freq * pos / total + phase) + 1) / 2
+
+
+def _pat_fade_in(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return pos / (total - 1)
+
+
+def _pat_fade_out(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return 1 - pos / (total - 1)
+
+
+def _pat_pulse(pos: int, total: int, freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return 1.0 if (pos * freq / total) % 1 < 0.5 else 0.1
+
+
+def _pat_crescendo(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return (pos / (total - 1)) ** 2
+
+
+def _pat_decrescendo(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return (1 - pos / (total - 1)) ** 2
+
+
+def _pat_spike(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return 1 - abs(2 * pos / (total - 1) - 1)
+
+
+def _pat_sawtooth(pos: int, total: int, freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    return (pos * freq / total) % 1.0
+
+
+def _pat_heartbeat(pos: int, total: int, _freq: float, _phase: float) -> float:
+    if total <= 1:
+        return 1.0
+    t = pos / (total - 1)
+    # Two spikes at ~30% and ~55% through, with decay
+    beat1 = math.exp(-((t - 0.30) ** 2) / 0.005)
+    beat2 = math.exp(-((t - 0.55) ** 2) / 0.003) * 0.7
+    return min(1.0, beat1 + beat2)
+
+
+PATTERNS: dict[str, callable] = {
+    "random": _pat_random,
+    "wave": _pat_wave,
+    "fade-in": _pat_fade_in,
+    "fade-out": _pat_fade_out,
+    "pulse": _pat_pulse,
+    "crescendo": _pat_crescendo,
+    "decrescendo": _pat_decrescendo,
+    "spike": _pat_spike,
+    "sawtooth": _pat_sawtooth,
+    "heartbeat": _pat_heartbeat,
+}
+
+# ---------------------------------------------------------------------------
+# Core engine
+# ---------------------------------------------------------------------------
+
+def _build_mark_lists(
+    block_names: tuple[str, ...],
+    mark_filter: str,
+) -> tuple[list[str], list[str], list[str]]:
+    """Build the above/below/middle mark character lists."""
+    above_codes: list[int] = []
+    below_codes: list[int] = []
+    middle_codes: list[int] = []
+
+    for name in block_names:
+        a, b, m = BLOCKS[name]
+        above_codes.extend(a)
+        below_codes.extend(b)
+        middle_codes.extend(m)
+
+    if mark_filter != "all":
+        allowed = MARK_FILTERS.get(mark_filter, set())
+        above_codes = [c for c in above_codes if c in allowed]
+        below_codes = [c for c in below_codes if c in allowed]
+        middle_codes = [c for c in middle_codes if c in allowed]
+
+    return (
+        [chr(c) for c in above_codes],
+        [chr(c) for c in below_codes],
+        [chr(c) for c in middle_codes],
+    )
+
+
+def _should_skip(
+    char: str,
+    skip_spaces: bool,
+    skip_punct: bool,
+    skip_numbers: bool,
+    only_ascii: bool,
+) -> bool:
+    if skip_spaces and char == " ":
+        return True
+    if skip_punct and unicodedata.category(char).startswith("P"):
+        return True
+    if skip_numbers and char.isdigit():
+        return True
+    if only_ascii and (ord(char) > 127 or not char.isalpha()):
+        return True
+    return False
+
+
+def zalgofy(
+    text: str,
+    *,
+    up: int,
+    mid: int,
+    down: int,
+    variance: float,
+    pattern_fn: callable,
+    freq: float,
+    phase: float,
+    marks_above: list[str],
+    marks_below: list[str],
+    marks_middle: list[str],
+    skip_spaces: bool,
+    skip_punct: bool,
+    skip_numbers: bool,
+    only_ascii: bool,
+    max_marks: int | None,
+    rng: random.Random,
+) -> str:
+    result: list[str] = []
+
+    # Build position index for non-combining characters
+    base_positions: list[int] = []
+    for i, c in enumerate(text):
+        if not unicodedata.category(c).startswith("M"):
+            base_positions.append(i)
+    total = len(base_positions)
+    pos_map = {idx: rank for rank, idx in enumerate(base_positions)}
+
+    for i, char in enumerate(text):
+        result.append(char)
+
+        if _should_skip(char, skip_spaces, skip_punct, skip_numbers, only_ascii):
+            continue
+        if unicodedata.category(char).startswith("M"):
+            continue
+
+        pos_index = pos_map.get(i, 0)
+        multiplier = pattern_fn(pos_index, total, freq, phase)
+
+        def calc_count(base_intensity: int) -> int:
+            if base_intensity == 0:
+                return 0
+            adjusted = base_intensity * multiplier
+            if variance > 0:
+                low = max(0.0, adjusted * (1 - variance))
+                high = adjusted * (1 + variance)
+                return max(0, round(rng.uniform(low, high)))
+            return round(adjusted)
+
+        n_up = calc_count(up)
+        n_mid = calc_count(mid)
+        n_down = calc_count(down)
+
+        if max_marks is not None:
+            total_marks = n_up + n_mid + n_down
+            if total_marks > max_marks:
+                if total_marks > 0:
+                    scale = max_marks / total_marks
+                    n_up = round(n_up * scale)
+                    n_mid = round(n_mid * scale)
+                    n_down = round(n_down * scale)
+                    # Ensure we don't exceed due to rounding
+                    while n_up + n_mid + n_down > max_marks:
+                        if n_up > 0:
+                            n_up -= 1
+                        elif n_down > 0:
+                            n_down -= 1
+                        elif n_mid > 0:
+                            n_mid -= 1
+
+        if marks_above and n_up > 0:
+            result.extend(rng.choices(marks_above, k=n_up))
+        if marks_middle and n_mid > 0:
+            result.extend(rng.choices(marks_middle, k=n_mid))
+        if marks_below and n_down > 0:
+            result.extend(rng.choices(marks_below, k=n_down))
+
+    return "".join(result)
+
+
+def dezalgofy(text: str, *, threshold: int = 0) -> str:
+    """Strip combining marks from text.
+
+    If *threshold* > 0, only strip marks from characters that have more than
+    *threshold* combining marks attached.
+    """
+    if threshold <= 0:
+        return "".join(
+            c for c in text if not unicodedata.category(c).startswith("M")
+        )
+
+    result: list[str] = []
+    current_base: str | None = None
+    current_marks: list[str] = []
+
+    def flush():
+        if current_base is not None:
+            result.append(current_base)
+            if len(current_marks) <= threshold:
+                result.extend(current_marks)
+
+    for c in text:
+        if unicodedata.category(c).startswith("M"):
+            current_marks.append(c)
+        else:
+            flush()
+            current_base = c
+            current_marks = []
+
+    flush()
+    return "".join(result)
+
+
+def analyze_text(text: str) -> dict:
+    """Analyze Zalgo density and stats."""
+    total_chars = len(text)
+    base_chars = 0
+    combining_marks = 0
+    marks_above = 0
+    marks_below = 0
+    marks_middle = 0
+    max_marks_on_char = 0
+    current_marks = 0
+
+    all_above = set(CORE_ABOVE + EXTENDED_ABOVE + SUPPLEMENT_ABOVE + SYMBOLS_ABOVE)
+    all_below = set(CORE_BELOW + EXTENDED_BELOW + SUPPLEMENT_BELOW + SYMBOLS_BELOW)
+    all_middle = set(CORE_MIDDLE + EXTENDED_MIDDLE + SUPPLEMENT_MIDDLE + SYMBOLS_MIDDLE)
+
+    for c in text:
+        if unicodedata.category(c).startswith("M"):
+            combining_marks += 1
+            current_marks += 1
+            cp = ord(c)
+            if cp in all_above:
+                marks_above += 1
+            elif cp in all_below:
+                marks_below += 1
+            elif cp in all_middle:
+                marks_middle += 1
+            else:
+                # Unknown combining mark — count as above by default
+                marks_above += 1
+        else:
+            max_marks_on_char = max(max_marks_on_char, current_marks)
+            current_marks = 0
+            base_chars += 1
+
+    # Don't forget trailing marks
+    max_marks_on_char = max(max_marks_on_char, current_marks)
+
+    avg = combining_marks / base_chars if base_chars else 0.0
+    density = combining_marks / total_chars if total_chars else 0.0
+    is_zalgo = avg > 1.0
+
+    if avg < 0.5:
+        verdict = "clean"
+    elif avg < 2:
+        verdict = "whisper"
+    elif avg < 5:
+        verdict = "subtle"
+    elif avg < 10:
+        verdict = "moderate"
+    elif avg < 20:
+        verdict = "heavy"
+    elif avg < 50:
+        verdict = "extreme"
+    elif avg < 100:
+        verdict = "demonic"
+    else:
+        verdict = "void"
+
+    return {
+        "total_chars": total_chars,
+        "base_chars": base_chars,
+        "combining_marks": combining_marks,
+        "marks_above": marks_above,
+        "marks_below": marks_below,
+        "marks_middle": marks_middle,
+        "max_marks_per_char": max_marks_on_char,
+        "avg_marks_per_char": round(avg, 2),
+        "density": round(density, 2),
+        "is_zalgo": is_zalgo,
+        "verdict": verdict,
+    }
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+def _read_text(text: tuple[str, ...]) -> str:
+    """Get text from positional args or stdin."""
+    if text:
+        return " ".join(text)
+    if not sys.stdin.isatty():
+        return sys.stdin.read().rstrip("\n")
+    raise click.UsageError("No text provided. Pass TEXT as argument or pipe via stdin.")
+
+
+class DefaultGroup(click.Group):
+    """A click Group that falls back to a default command."""
+
+    def __init__(self, *args, default_cmd: str = "encode", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.default_cmd = default_cmd
+
+    def parse_args(self, ctx, args):
+        # Let group-level flags (--version, --help) pass through
+        group_flags = {"--version", "--help"}
+        if args and args[0] not in self.commands and args[0] not in group_flags:
+            args = [self.default_cmd] + args
+        elif not args:
+            args = [self.default_cmd]
+        return super().parse_args(ctx, args)
+
+
+@click.group(cls=DefaultGroup, default_cmd="encode", invoke_without_command=True)
+@click.version_option("1.0.0", prog_name="zalgo")
+def cli():
+    """He comes. The best damn Zalgo text generator on the planet."""
+    pass
+
+
+@cli.command()
+@click.argument("text", nargs=-1)
+@click.option("--intensity", "-i", type=click.IntRange(0, 100), default=None,
+              help="Set all directions at once (0-100).")
+@click.option("--up", "-u", type=click.IntRange(0, 100), default=None,
+              help="Above-mark intensity (0-100).")
+@click.option("--mid", "-m", type=click.IntRange(0, 100), default=None,
+              help="Middle/overlay mark intensity (0-100).")
+@click.option("--down", "-d", type=click.IntRange(0, 100), default=None,
+              help="Below-mark intensity (0-100).")
+@click.option("--variance", "-V", type=click.FloatRange(0.0, 1.0), default=None,
+              help="Per-char randomness (0.0=uniform, 1.0=wild).")
+@click.option("--max-marks", type=int, default=None,
+              help="Hard cap on total marks per character.")
+@click.option("--style", "-s", type=click.Choice(list(STYLES.keys()), case_sensitive=False),
+              default=None, help="Style preset.")
+@click.option("--pattern", "-p", type=click.Choice(list(PATTERNS.keys()), case_sensitive=False),
+              default="random", help="Pattern mode for intensity distribution.")
+@click.option("--wave-freq", type=float, default=1.0,
+              help="Frequency for periodic patterns.")
+@click.option("--wave-phase", type=float, default=0.0,
+              help="Phase offset in radians.")
+@click.option("--blocks", "-b", type=click.Choice(["core", "extended", "supplement", "symbols", "all"],
+              case_sensitive=False), multiple=True, default=("core",),
+              help="Unicode blocks to draw marks from (repeatable).")
+@click.option("--marks", type=click.Choice(["all", "accents", "dots", "lines", "letters", "arrows", "hooks"],
+              case_sensitive=False), default="all",
+              help="Filter combining marks by subcategory.")
+@click.option("--skip-spaces/--no-skip-spaces", default=True,
+              help="Leave spaces untouched (default: skip).")
+@click.option("--skip-punct", is_flag=True, default=False,
+              help="Skip punctuation characters.")
+@click.option("--skip-numbers", is_flag=True, default=False,
+              help="Skip digit characters.")
+@click.option("--only-ascii", is_flag=True, default=False,
+              help="Only zalgo-ify ASCII letters.")
+@click.option("--seed", type=int, default=None,
+              help="Random seed for reproducible output.")
+@click.option("--output", "-o", type=click.Path(), default=None,
+              help="Write to file instead of stdout.")
+def encode(text, intensity, up, mid, down, variance, max_marks, style,
+           pattern, wave_freq, wave_phase, blocks, marks, skip_spaces,
+           skip_punct, skip_numbers, only_ascii, seed, output):
+    """Zalgo-ify text. H̵̛̭e̸͓̊ ̷̧̈́c̶̣͝o̷̙͠m̵͚̌e̶̬̓s̶̈ͅ."""
+    input_text = _read_text(text)
+
+    # Resolve style preset as base values
+    if style:
+        preset = STYLES[style]
+        base_up = preset["up"]
+        base_mid = preset["mid"]
+        base_down = preset["down"]
+        base_var = preset["variance"]
+    else:
+        base_up = 5
+        base_mid = 2
+        base_down = 5
+        base_var = 0.5
+
+    # --intensity overrides all directions
+    if intensity is not None:
+        base_up = intensity
+        base_mid = max(1, intensity // 5)
+        base_down = intensity
+
+    # Explicit flags override preset/intensity values
+    final_up = up if up is not None else base_up
+    final_mid = mid if mid is not None else base_mid
+    final_down = down if down is not None else base_down
+    final_var = variance if variance is not None else base_var
+
+    # Resolve blocks
+    if "all" in blocks:
+        block_names = ("core", "extended", "supplement", "symbols")
+    else:
+        # Always include core, plus any extras
+        block_set = set(blocks)
+        block_set.add("core")
+        block_names = tuple(sorted(block_set))
+
+    marks_above, marks_below, marks_middle = _build_mark_lists(block_names, marks)
+
+    pattern_fn = PATTERNS[pattern]
+    rng = random.Random(seed)
+
+    result = zalgofy(
+        input_text,
+        up=final_up,
+        mid=final_mid,
+        down=final_down,
+        variance=final_var,
+        pattern_fn=pattern_fn,
+        freq=wave_freq,
+        phase=wave_phase,
+        marks_above=marks_above,
+        marks_below=marks_below,
+        marks_middle=marks_middle,
+        skip_spaces=skip_spaces,
+        skip_punct=skip_punct,
+        skip_numbers=skip_numbers,
+        only_ascii=only_ascii,
+        max_marks=max_marks,
+        rng=rng,
+    )
+
+    if output:
+        with open(output, "w", encoding="utf-8") as f:
+            f.write(result + "\n")
+    else:
+        click.echo(result)
+
+
+@cli.command()
+@click.argument("text", nargs=-1)
+@click.option("--threshold", "-t", type=int, default=0,
+              help="Only strip chars with more than N combining marks.")
+def decode(text, threshold):
+    """Strip combining marks (de-Zalgo)."""
+    input_text = _read_text(text)
+    result = dezalgofy(input_text, threshold=threshold)
+    click.echo(result)
+
+
+@cli.command()
+@click.argument("text", nargs=-1)
+def analyze(text):
+    """Analyze Zalgo density and stats (JSON output)."""
+    input_text = _read_text(text)
+    stats = analyze_text(input_text)
+    click.echo(json.dumps(stats, indent=2))
+
+
+if __name__ == "__main__":
+    cli()
