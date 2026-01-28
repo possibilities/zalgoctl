@@ -505,7 +505,7 @@ class DefaultGroup(click.Group):
 
 
 @click.group(cls=DefaultGroup, default_cmd="encode", invoke_without_command=True)
-@click.version_option("1.0.0", prog_name="zalgo")
+@click.version_option("1.0.0", prog_name="zalgoctl")
 def cli():
     """He comes. The best damn Zalgo text generator on the planet."""
     pass
