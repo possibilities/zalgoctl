@@ -251,6 +251,7 @@ def zalgofy(
     mid: int,
     down: int,
     variance: float,
+    char_prob: float,
     pattern_fn: callable,
     freq: float,
     phase: float,
@@ -280,6 +281,8 @@ def zalgofy(
         if _should_skip(char, skip_spaces, skip_punct, skip_numbers, only_ascii):
             continue
         if unicodedata.category(char).startswith("M"):
+            continue
+        if char_prob < 1.0 and rng.random() > char_prob:
             continue
 
         pos_index = pos_map.get(i, 0)
@@ -481,6 +484,8 @@ def cli():
               help="Below-mark intensity (0-100).")
 @click.option("--variance", "-V", type=click.FloatRange(0.0, 1.0), default=None,
               help="Per-char randomness (0.0=uniform, 1.0=wild).")
+@click.option("--prob", "-P", type=click.FloatRange(0.0, 1.0), default=1.0,
+              help="Probability each character gets corrupted (0.0-1.0).")
 @click.option("--max-marks", type=int, default=None,
               help="Hard cap on total marks per character.")
 @click.option("--style", "-s", type=click.Choice(list(STYLES.keys()), case_sensitive=False),
@@ -509,7 +514,7 @@ def cli():
               help="Random seed for reproducible output.")
 @click.option("--output", "-o", type=click.Path(), default=None,
               help="Write to file instead of stdout.")
-def encode(text, intensity, up, mid, down, variance, max_marks, style,
+def encode(text, intensity, up, mid, down, variance, prob, max_marks, style,
            pattern, wave_freq, wave_phase, blocks, marks, skip_spaces,
            skip_punct, skip_numbers, only_ascii, seed, output):
     """Zalgo-ify text. H̵̛̭e̸͓̊ ̷̧̈́c̶̣͝o̷̙͠m̵͚̌e̶̬̓s̶̈ͅ."""
@@ -560,6 +565,7 @@ def encode(text, intensity, up, mid, down, variance, max_marks, style,
         mid=final_mid,
         down=final_down,
         variance=final_var,
+        char_prob=prob,
         pattern_fn=pattern_fn,
         freq=wave_freq,
         phase=wave_phase,
