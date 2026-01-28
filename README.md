@@ -2,8 +2,6 @@
 
 A Zalgo text generator CLI.
 
-**[View the showcase](https://possibilities.github.io/zalgoctl/)** - see every feature demonstrated.
-
 ## Usage
 
 ```bash
