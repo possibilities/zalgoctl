@@ -96,6 +96,45 @@ BLOCKS = {
     "symbols": (SYMBOLS_ABOVE, SYMBOLS_BELOW, SYMBOLS_MIDDLE),
 }
 
+# Mark pool presets for distinct visual aesthetics
+POOLS: dict[str, dict[str, list[str]] | None] = {
+    "classic": {
+        "above": [chr(c) for c in range(0x0300, 0x036F)],
+        "below": [chr(c) for c in range(0x0316, 0x0349)],
+        "middle": [chr(c) for c in range(0x0334, 0x0338)],
+    },
+    "curated": None,  # signals: use _build_mark_lists with core block
+    "dense": {
+        # Stacking-friendly marks: lines, overlines, double marks
+        "above": [chr(c) for c in [
+            0x0305, 0x030D, 0x030E, 0x030F, 0x0310,  # overlines
+            0x033D, 0x033E, 0x033F,  # double marks
+            0x0346,  # bridge above
+        ]],
+        "below": [chr(c) for c in [
+            0x0320, 0x0321, 0x0322,  # minus/plus below
+            0x0324, 0x0325, 0x0326,  # diaeresis, ring, comma below
+            0x0331, 0x0332, 0x0333,  # macron, low line, double low line
+        ]],
+        "middle": [chr(c) for c in range(0x0334, 0x0339)],  # all strikethroughs
+    },
+    "geometric": {
+        # Lines and arrows
+        "above": [chr(c) for c in [
+            0x0305, 0x030D, 0x030E, 0x030F,  # lines above
+            0x034A, 0x034B, 0x034C,  # arrows
+            0x0350, 0x0351, 0x0352,  # more arrows
+        ]],
+        "below": [chr(c) for c in [
+            0x0316, 0x0317, 0x0318, 0x0319,  # tacks
+            0x031C, 0x031D, 0x031E, 0x031F,  # up/down tacks
+            0x0320, 0x0329, 0x032A, 0x032B,  # lines and bridges
+        ]],
+        "middle": [chr(c) for c in [0x0335, 0x0336, 0x0337, 0x0338]],  # strikethroughs
+    },
+    "full": None,  # signals: use _build_mark_lists with all blocks
+}
+
 # ---------------------------------------------------------------------------
 # Style presets
 # ---------------------------------------------------------------------------
@@ -502,6 +541,8 @@ def cli():
 @click.option("--marks", type=click.Choice(["all", "accents", "dots", "lines", "letters", "arrows", "hooks"],
               case_sensitive=False), default="all",
               help="Filter combining marks by subcategory.")
+@click.option("--pool", type=click.Choice(list(POOLS.keys()), case_sensitive=False),
+              default=None, help="Predefined mark pool (overrides --blocks/--marks).")
 @click.option("--skip-spaces/--no-skip-spaces", default=True,
               help="Leave spaces untouched (default: skip).")
 @click.option("--skip-punct", is_flag=True, default=False,
@@ -515,7 +556,7 @@ def cli():
 @click.option("--output", "-o", type=click.Path(), default=None,
               help="Write to file instead of stdout.")
 def encode(text, intensity, up, mid, down, variance, prob, max_marks, style,
-           pattern, wave_freq, wave_phase, blocks, marks, skip_spaces,
+           pattern, wave_freq, wave_phase, blocks, marks, pool, skip_spaces,
            skip_punct, skip_numbers, only_ascii, seed, output):
     """Zalgo-ify text. H̵̛̭e̸͓̊ ̷̧̈́c̶̣͝o̷̙͠m̵͚̌e̶̬̓s̶̈ͅ."""
     input_text = _read_text(text)
@@ -545,16 +586,30 @@ def encode(text, intensity, up, mid, down, variance, prob, max_marks, style,
     final_down = down if down is not None else base_down
     final_var = variance if variance is not None else base_var
 
-    # Resolve blocks
-    if "all" in blocks:
-        block_names = ("core", "extended", "supplement", "symbols")
+    # Resolve mark pools
+    if pool:
+        pool_def = POOLS[pool]
+        if pool_def is not None:
+            marks_above = pool_def["above"]
+            marks_below = pool_def["below"]
+            marks_middle = pool_def["middle"]
+        elif pool == "full":
+            marks_above, marks_below, marks_middle = _build_mark_lists(
+                ("core", "extended", "supplement", "symbols"), "all"
+            )
+        else:  # curated
+            marks_above, marks_below, marks_middle = _build_mark_lists(("core",), "all")
     else:
-        # Always include core, plus any extras
-        block_set = set(blocks)
-        block_set.add("core")
-        block_names = tuple(sorted(block_set))
+        # Resolve blocks
+        if "all" in blocks:
+            block_names = ("core", "extended", "supplement", "symbols")
+        else:
+            # Always include core, plus any extras
+            block_set = set(blocks)
+            block_set.add("core")
+            block_names = tuple(sorted(block_set))
 
-    marks_above, marks_below, marks_middle = _build_mark_lists(block_names, marks)
+        marks_above, marks_below, marks_middle = _build_mark_lists(block_names, marks)
 
     pattern_fn = PATTERNS[pattern]
     rng = random.Random(seed)
