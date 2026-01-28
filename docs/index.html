@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zalgoctl showcase</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --black: #484f58;
+            --red: #ff7b72;
+            --green: #7ee787;
+            --yellow: #d29922;
+            --blue: #79c0ff;
+            --magenta: #d2a8ff;
+            --cyan: #a5d6ff;
+            --white: #c9d1d9;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 2rem;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .bold { font-weight: bold; }
+        .dim { opacity: 0.6; }
+        .fg-black { color: var(--black); }
+        .fg-red { color: var(--red); }
+        .fg-green { color: var(--green); }
+        .fg-yellow { color: var(--yellow); }
+        .fg-blue { color: var(--blue); }
+        .fg-magenta { color: var(--magenta); }
+        .fg-cyan { color: var(--cyan); }
+        .fg-white { color: var(--white); }
+        .fg-bright-black { color: #6e7681; }
+        .fg-bright-red { color: #ffa198; }
+        .fg-bright-green { color: #56d364; }
+        .fg-bright-yellow { color: #e3b341; }
+        .fg-bright-blue { color: #79c0ff; }
+        .fg-bright-magenta { color: #d2a8ff; }
+        .fg-bright-cyan { color: #a5d6ff; }
+        .fg-bright-white { color: #ffffff; }
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #30363d;
+            opacity: 0.7;
+        }
+        footer a { color: var(--cyan); }
+    </style>
+</head>
+<body>
+    <pre><span class="bold">
+ ______     _
+|__  / |__ | | __ _  ___
+  / /| &#x27;_ \| |/ _` |/ _ \
+ / /_| | | | | (_| | (_) |
+/____|_| |_|_|\__, |\___/
+              |___/
+</span><span class="dim">Showcase — every feature demonstrated</span>
+
+<span class="fg-magenta"><span class="bold">━━━ BASICS ━━━</span></span>
+
+  <span class="dim"># Default encode (moderate intensity)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Hello World&quot; --seed 42</span>
+  Ḫ̴̡̛̗̠̌͑ͪ̄͘e̵̦̜̜͎͆ͥ̀ͥ͒̒͢l̢̢̘̤̙̜͂ͮ̔̓ͦ͋͟͡͝l̨̟̟̔̋̎ͬ͞͞ͅo̶͓̥̹̩͕͑ͧͣ̌́̑̎͢ W̶̮̜̘̜̓̎͆ͪ̕͢õ̴̯̣̹̜̫̔ͯ͂ͮͨ͟͟r̷̞͇̯͈̯̖̦̎̀̉ͫͨ͞͞ḽ̵̙͇͇̝̬̰ͦ̐̃͢͡d̷̡̫̮̝̦̋͂̋͘͢͞
+
+
+  <span class="dim"># Pipe text through stdin</span>
+  <span class="fg-cyan">$ echo &#x27;He comes&#x27; | ./zalgoctl --seed 42</span>
+  Ḫ̴̡̛̗̠̌͑ͪ̄͘e̵̦̜̜͎͆ͥ̀ͥ͒̒͢ c̢̢̘̤̙̜͂ͮ̔̓ͦ͋͟͡͝ǫ̟̟̔̋̎ͬ͞͞ͅm̶͓̥̹̩͕͑ͧͣ̌́̑̎͢e̶̮̜̘̜̓̎͆ͪ̕͢s̴̯̣̹̜̫̃̔ͯ͂ͮͨ͟͟
+
+
+  <span class="dim"># Encode is the default subcommand</span>
+  <span class="fg-cyan">$ ./zalgoctl &quot;The abyss stares back&quot; --seed 42</span>
+  Ť̴̡̛̮̗̠͑ͪ̄͘h̵̦̜̜͎͆ͥ̀ͥ͒̒͢e̢̢̘̤̙̜͂ͮ̔̓ͦ͋͟͡͝ ą̟̟̔̋̎ͬ͞͞ͅb̶͓̥̹̩͕͑ͧͣ̌́̑̎͢y̶̮̜̘̜̓̎͆ͪ̕͢s̴̯̣̹̜̫̃̔ͯ͂ͮͨ͟͟s̷̞͇̯͈̯̖̦̎̀̉ͫͨ͞͞ s̵̭̙͇͇̝̬̰ͦ̐̃͢͡t̷̡̫̮̝̦̋͂̋͘͢͞ã̴̢̡̺̝͋̌ͪͨr̛̛͚̜̩̦͎ͤͥ̊̅̾͟͟ȅ̛͎̰̘͚͍̍ͫ͜s̷̪͙͚̰̼̞̥̉̿̋̃̔ͯ̚͜͠ b̴̶̢̲̺̝͔͛̃͆̀ͧ̈ͭa̶̢̛̩̺̥̥͇͆́ͬ͟c̷̨͓͓̞͍̻̲ͯ̄̋͢k̷̲̼̠ͥ̐͐ͬ̇̆̅͝
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ STYLE PRESETS ━━━</span></span>
+
+  <span class="dim"># whisper — barely there</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Whisper in the dark&quot; --style whisper --seed 42</span>
+  W̡̏h̙ͪǐ̮s̯͌p̖ͥe̞̒r̜̅ iͥͅn̰̔ ṯͨȟ̤e̤̅ d̡̔a̲͌r̨̈k̻̓
+
+
+  <span class="dim"># subtle — readable but eerie</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Something is wrong&quot; --style subtle --seed 42</span>
+  Š͔̙͘͟ò̶̹̯́m̦̞̀ͥ͟e̯̅ͧ͊͠ͅt̼̘ͦ͋ͨ͝ȟ̷̳̅i̲̟̎ͬ͞n̻͎ͯ͌͝g̶͖̑̎ ị̢ͫ̕͜s̶͚̮ͪ̕ w̨̘͋ͤ͜r̯̣̹ͨ̀͗͟o̷̮̟ͭͩn̵͇̯͌͊g͓̑́͢
+
+
+  <span class="dim"># moderate — classic Zalgo (default)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;He waits behind the wall&quot; --style moderate --seed 42</span>
+  Ḫ̴̡̛̗̠̌͑ͪ̄͘e̵̦̜̜͎͆ͥ̀ͥ͒̒͢ w̢̢̘̤̙̜͂ͮ̔̓ͦ͋͟͡͝ą̟̟̔̋̎ͬ͞͞ͅi̶͓̥̹̩͕͑ͧͣ̌́̑̎͢t̶̮̜̘̜̓̎͆ͪ̕͢s̴̯̣̹̜̫̃̔ͯ͂ͮͨ͟͟ b̷̞͇̯͈̯̖̦̎̀̉ͫͨ͞͞ḙ̵̙͇͇̝̬̰ͦ̐̃͢͡h̷̡̫̮̝̦̋͂̋͘͢͞ĩ̴̢̡̺̝͋̌ͪͨn̛̛͚̜̩̦͎ͤͥ̊̅̾͟͟d̛͎̰̘͚͍̏̍ͫ͜ t̷̪͙͚̰̼̞̥̉̿̋̃̔ͯ̚͜͠h̴̶̢̲̺̝͔͛̃͆̀ͧ̈ͭe̶̢̛̩̺̥̥͇͆́ͬ͟ w̷̨͓͓̞͍̻̲ͯ̄̋͢a̷̲̼̠ͥ̐͐ͬ̇̆̅͝ḷ̛̰̪̖ͪͧ̅̏̀͠͞ͅl̵̵̷̡̢͔͉͎͔̜̓ͦ͆
+
+
+  <span class="dim"># heavy — serious corruption</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The door is opening&quot; --style heavy --seed 42</span>
+  Ť̛͉̖͉̻̦̞͙̦̜͑ͪ̄́̌̀́̊͌͂̌͘͞h̢̢̨̨̡̼̘̤̙̜̤̳̣ͥ͂ͮ̔̓͘͠͞͡͝ẹ̸̢̡̰̣̱͔̩͚̮̜̘̜̳̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͘͜͞͡ d̷̶̛͕͓̥̹̲̞̔ͯ͂ͮͨ̀͗͑͂̎͌̆̽ͭͩ͝ọ̵̡̡͓̪̯̠̥͚̹̫̮̝̦̱͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ͜͝ͅo̵̱̬͈͉̠̜͋̌ͪͨ̃̍͐̋͢r̷̶̡̛̫͎̰̘͚͍͙͕͎̟̭͑ͯ̅̒ͨ̍̊̽͘̚͢ i̛̱̯̘̱̮͎̞͙̙ͯ̎ͤ̾ͭͯ̓͗̈̐͢ͅš̢̡̛̠̼̩̺̥̥͇̙̬͚͚̙̣̆ͩ̍͆͋͢͞͝ o̶̷̭͔͎̜̪̤̖͇̹̣̰̪̖̙͓͔̔̈ͦ͒͊ͯ͌̀ͥ̐͐ͬ̇̆̅̓̎͊͟͞ͅp̵͙͉͓̗̦͕͉͓͉̣͈̜̈̇̐ͪͤͨͪ̋̍̅ͣͩ̚͢͞͡ͅę̶̷̜̫̥̲̮̱ͥ̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̆̕͢͢ͅn̷̷̥̥̩̩̥ͫ͂͗͐̔̃͐͘͟͡i̡̡̢̬̫̬͔͉̟̙̮̳̦͍͇̺̠̗͑ͪ͊̐̓̀̏͜͝͞n̶̴̢̛͎̬͉̺͚͋̊͒̀̍͐̀͛ͣ̅̚͢͝g̷̴̷̷̢̡̨̦̯̞̻̼̘̩̯̪̪͔̱̻͎͇͊͗̀ͦ̓ͪ̿̎̍͌ͣ́͘͞
+
+
+  <span class="dim"># extreme — full chaos</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Fear me&quot; --style extreme --seed 42</span>
+  F̢̢̨̨̡̨̛̘̤̙̜̤̳̣͖̹̲̟̟͚̹̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ͘͘͟͝ͅe̴̡̛̯̣̹̜̫̫͖͓̣̮̟͕͓̥̹̲̞͇̯͈̯̖̦̖͕͓͍̥̘͓͖̙̭̙͇͇̝̬̰̣͓̪̯ͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ̕̕͢͟͟͝͡a̷̶̡̨̛̛͕̫͎̰̘͚͍͙͕͎̟̭̩̘͚̣͈̬̪͙ͯ͌̽́̆̌̒͆̌̌̃͋̌ͪͨ̃̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͑ͯ̅̒ͨ̍̊̽͘̚͜r̴̷̡̢̛̝̝̜̰̣̲̼̠̳̣̭͔͎̜̪̤̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔͉͎͔̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͑̌̆ͩ̍͆͋͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̕͢͠͞ͅ m̷̵̡̢̨̨͉̬̥͈̗̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕̯̼̺̙̺̦̥͎̼̥͋̈ͬͨͮͥͩ́̒ͬͥ̚͘͡͠͠͡͡ͅͅe̸̡̢̢̢̛̛͇̺̠̗̬͎̙̪̳̠̻̭̹̖͇͇̜̪̟͙̮̘̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄͝͞͠
+
+
+  <span class="dim"># demonic — screen-destroying</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Obey&quot; --style demonic --seed 42</span>
+  Ợ̢̡̨̰̣̱͔̩͚̮̜̘̜̳͈̪̘͚̯͙͎̖̼̺̯̣̹̜̫̫͖͓̣̮̟͕͓̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐͘͘͘̕͜͡b̴̶̴̶̶̵̢̢̡̨̢̢̛͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̩̘͚̣͈̬̪͙͚̰̼̞̥͙̱̯̘̱̮͎̞͙̙̠̲̺̝͔̲̳̈͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ̇̿̓̎ͨ̋͂̋̑ͯ͌̽́̆̌̒͆̌̌͘͟͞͡͡ͅͅe̴̴̡̢̡̢̨̛̞̝̥͔͉͎͔̜͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜͓͎͉̬̥͈̗̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̀ͥ̐͐ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̕͘͜͝͡͡͝͡͝ͅͅy̶̵̸̶̶̴̢̢̛̛̬͎̙̪̳̠̻̭̹̖ͫ͂͗͐̔̃͐̒̑ͧ͗̐̑̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ͘̚̚͟͝͞͠͠
+
+
+  <span class="dim"># void — the abyss stares back</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;End&quot; --style void --seed 42</span>
+  Ě̴̡̡̢̡̢̢̡̛̛̛͓͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̝͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦͎͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂ͮͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐͘͘͘̕̕ͅͅn̢̡̨̡̢̛̛̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̹̖͉̥̺͖̝̝̜̰̣̲̼̠̳̣̭͔͎̜̪̤̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔͉͎͔̜͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜̏̍ͫ̽ͨ̓̂ͯͦͮͫͧ̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͑̌̆ͩ̍͆͋̚͜͢͞͝ͅͅd̷̸̷̴̴̸̶̡̧̨̧̛̛̛̛̛̛̛̖̞̝̺̰̻͇̟̲̝͍͙̜̗̥̺͙̩̼̙̻̳̜͇͎̲̝͚͈̪̮͎͍̜͙̳͍̼̫ͥ̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̆ͮ̉ͭ̎̅̑͊́̈́̎͒̀ͫ͂͗͐̔̃͐̒̑ͧ͗̐̑̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͋̒ͦ͛͑̌̊́̍̿ͧ̄͋̊͒̀̍͐̀͛ͣ̅̉ͭ́̂̍ͧ̾ͥ͐ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͂̇̌͒͒̃͂̋ͪ͆͒ͨͣ̔̀̓͛ͧͭ͛̓͊̌̌́̒͑̉̾̇͋́̈́́͌̇̾̂̔̋̕͘̕͘̚̚̚͘̚̚̚̕͢͢͠͠͠͝͞͠͞͠ͅ
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ DIRECTIONAL PRESETS ━━━</span></span>
+
+  <span class="dim"># up-only — reaching skyward</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Rising&quot; --style up-only --seed 42</span>
+  Ŕ̛̏̌͑ͪ̄́̌̀́̊͌͂̌͆͘ìͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ͘s͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊ï̔ͯ͌̓͑ͧͣ̌͘n̑̎̋ͬͩ̑͐̕g̛̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂̕
+
+
+  <span class="dim"># down-only — melting downward</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Sinking&quot; --style down-only --seed 42</span>
+  S̡̡̡̗̤̺͔̙̪̗̮̗̠̹̯̱ͅį̖͉̻̦̞͙̦̜̜͎̲͉̯͙̰͍̳͎ͅn̢̢̨̨̡̼̘̤̙̜̤̳̣͖̹̲k̨̢̟͚̹̰̻͎͈ͅi̡̥̣͖͓̥̹̩n̢̡̨̬̣̰̣̱͔̩͚̮̜̘̜̳͈̪̘͚̯g͎̖̼̺̯̣̹̜̫̫͖͓̣̮̟͕͓̥̹̲̞͇
+
+
+  <span class="dim"># mid-only — in-place corruption</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Corrupted&quot; --style mid-only --seed 42</span>
+  C̴̷̶̵̴͟͟͜͡o̴̶̶͝͞͝r̴̸̵̸̵͟͢͠͠r͟͡͞͠͝u̸̴̶̷̴̶͟͝͠͞͡͝p̷̸̸̶͞t̶̵͢͟͞͞e̶͢͟͞͝͡͠d̷̷̶͢
+
+
+  <span class="dim"># ascend — heavy up, light down</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Ascending&quot; --style ascend --seed 42</span>
+  Ǎ̛̯͙͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͘͟s̸̹̰̻͎͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈͘͢c̴̛̼̺̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂ͮͨ̕̕ĕ̛̙̭̙̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐̃͢͡n̛̠̜̿̓̎ͨ̋͂̋̑ͯ͌̽́̆̌̒͆̌̌̃͋̌ͪͨ̃̍͐̋̇ͬ̈́͘͜͠͠d̵̡̛̩̘͑ͯ̅̒ͨ̍̊̽̏̍ͫ̽ͨ̓̂ͯͦͮͫͧ͘̚͜i̶̵̢̛͔ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͟n̴͉̥̺͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ̕͞g̶̛̛̜͈̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓̀̄ͩͪ̓ͦ͆̈̇̐ͪͤͨͪ̋͘
+
+
+  <span class="dim"># descend — light up, heavy down</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Descending&quot; --style descend --seed 42</span>
+  Ď̡̡̙̪̗̮̗̠̹̯̱͉̖͉̻̦̞͙̦͑͘͡ę̢̢̨̨̡̨̯͙̰͍̳͎̱̼̘̤̙̜̤̳̣͖̹̲̟̟͚̹̰̻͎͈͊ͥ͟ͅs̢̡͓̥̹̩͕̬̣̰̣̱͔̩͚̮̜̘̜̳̎̋͢c̴̼̺̯̣̹̜̫̫͖͓̣̮̟͕̔ͯ͂ͮ͡e̡̖̦̖͕͓͍̥̘͓͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹͊̈͛͂͠͝ͅň̶̶̢̢̡̙̳͔͎̙̺̝͖̱̬͈͉̠̒͆d̢̢̡̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̾͘͟͢i̢̪͙͚̰̼̞̥͙̱̯̘̱̮͎̞͙̙̠̲̺ͯ̎ͤ͜ͅn̢̡͖̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓͆͋͜͞͝g̖͉̥̺͖̝̝̜̰̣̲̼̠̳̣̭͔͎̜̪̤̖͇̹̣̰̪̖̙͓͔̰͒͊ͯ͞ͅ
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ MANUAL INTENSITY CONTROL ━━━</span></span>
+
+  <span class="dim"># Set all directions with --intensity</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Uniform chaos&quot; --intensity 15 --seed 42</span>
+  Ư̦̞͙̦̜̜͎̲͉̯͙̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀͘͟͠ͅn̸̶̷̨̢̡͖̹̲̟̟͚̹̰̻͎͈̗̥̣͖͓͋ͨ̈́͒̂̌̏̄̌̅̏͋̔ͅį̵̴̵̳͈̪̘͚̯͙͎̖̼̺̯ͫ̾̎̍̓̎͆ͪ̌ͯ́̕f̵̛͈̯̖̦̖͕͓͍̥̽ͭͩ̎̀̉ͫͨ̐͌͊͠͝ō̷̶̡̢̡̢̢̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̿̃͛ͣ̇̿̓͜͡ͅr̵̢̢̡̛̛̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̈́̾ͤͥ̊̅̾͑͘͢m̴̢̢̛̱̮͎̞͙̙̠̲̺̝͔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͟ c̶̷̨͓͓̞͍̻̲͚̹̖͉̥̺͖͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̕͢h̵̤̖͇̹̣̰̪̖̓̎͊͗̋͋̎̿ͪͧ͜ͅa̶̶̵͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜͓̓ͦ͆̈̇̐ͪͤͨ͡ͅǫ̵̨̥̲̮̱̣̼̖͕̯̼̺̙̺̦̥͎̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̆ͮ̉ͭ̎̕͜ͅͅs̶̡̛̛͔͉̟̙̮̳̦͍͇̺̠̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̚̚͜
+
+
+  <span class="dim"># Only above marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Sky high&quot; --up 20 --mid 0 --down 0 --seed 42</span>
+  Ś̛̏̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈͘k̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͘y͊̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾͘̕ h̛̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̕i̔ͯ͂ͮͨ̀͗͑͂̎͌g̛̽ͭͩ̎̀̉ͫͨ̐͌͊h͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩ
+
+
+  <span class="dim"># Only below marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Underground&quot; --up 0 --mid 0 --down 20 --seed 42</span>
+  U̡̡̡̗̤̺͔̙̪̗̮̗̠̹̯̱͉̖͉̻̦̞ͅn̨̢̢̨̨̡̦̜̜͎̲͉̯͙̰͍̳͎̱̼̘̤̙̜̤̳̣͖ͅd̨̢̡̲̟̟͚̹̰̻͎͈̗̥̣͖͓̥̹̩͕̬ͅḛ̢̡̣̱͔̩͚̮̜̘̜̳͈̪r̨͚̯͙͎̖̼̺̯̣̹g̫̫͖͓̣̮̟͕͓̥̹̲r͇̯͈̯̖̦̖͕͓͍̥̘͓o̡̡̢̡̢̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱̙̳ͅu̢̡̢͎̙̺̝͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦͎̠̫̪̤ͅn̡͕̫͎̰̘͚͍͙͕͎̟̭̩̘d͚̣͈̬̪͙͚̰̼̞̥͙̱̯̘̱̮ͅ
+
+
+  <span class="dim"># Only middle overlays</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Overwritten&quot; --up 0 --mid 15 --down 0 --seed 42</span>
+  O̴̷̶̵̴̶̴̶̶͟͟͜͡͝͞͝͞v̴̸̵̸̵̵̸͟͢͟͢͠͡͞͠͝͝͠͞͡e̴̶̷̴̶̵̷̸̸̶̷͟͢͞͞͞r̵̸̶͟͢͟͞͝͡͠w̷̷̶̷̸͢͡͞r̷̶̷̸̶̵̴̵̴̸͜͢͜͢͝͞͡͝͞͠͝i̴̷̵̷̶̷̵͟͟͜͜͢͡͝͞͡͝͡͡͞͞͠t̴̷̴̷̴̵̴͢͢͜͠͝͡͠͡͠t̵̷̶̶̷̵̶̸͜͜͟͢͜͝͡͝͞͝͞e̶̴̶̴̶̶̵͟͞͡͡n̶̵̵̸̸̶̶̷̶͜͜͜͜͟͟͢͜͜͝͠͠͡
+
+
+  <span class="dim"># Override a preset (heavy + no middle)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Heavy but clean&quot; --style heavy --mid 0 --seed 42</span>
+  H̡̛̱͉̖͉̏̌͑ͪ̄́̌̀́̊͌͂͘ë̢̢͎̱̼̘̤̙̜̤ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋͘a̢̡͎͈̗̥̣͖͓̥̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑͘v̨̜̳͈̪̘͚̯͙͎ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̕y̫̫͖͓̣̮̟͕͓̥̹̲̞͇̯͑͂̎͌̆ b̡̬̰̣͓̪̯̠̥͚̹̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ̇ͅŭ̢̡̙̺̝͖̱̬͈͉̠̜̌̒͆̌̌̃͋̌ͪͨt̢̪̤͕̫͎̰̘͚͍͙̾͑ͯ̅̒ͨ̍̊̽͘̚ c̢̢̛̱̯̘̱̮͎̞͙̙̠̲̺̝͔̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̚ͅl̡̨̛̬͚͚̙̣͖͓͓̞͍̻̲͆́ͬ̋͗̍͐̐̑͛̃̕è̪̤̖͇̹̣̰̪̖̙͓͔̰ͥ̐͐ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅ͅä͙͉͓̗̦͕͉͓͉̣͈̜̇̐ͪͤͨͪ̋̍̅ͣͩ͋̈ͬͨ̚ͅň̨̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕ͥ̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̕ͅ
+
+
+  <span class="dim"># Minimum intensity</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Barely touched&quot; --up 1 --mid 0 --down 1 --variance 0 --seed 42</span>
+  B̗͌ȁ̡r̺͘e̙ͪl̛̗y̮̌ t̠́o̯͌ǔ̱c̖ͥh̻ͥe̞̒d̦ͭ
+
+
+  <span class="dim"># Maximum intensity</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Max&quot; --up 100 --mid 10 --down 100 --seed 42</span>
+  M̵̡̡̢̡̢̢̡̢̢̛̛̛͈̯̖̦̖͕͓͍̥̘͓͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̝͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂ͮͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͘͘͘̕̕͞͞͠͝ͅͅą̵̶̷̵̷̨̡̡̢̢̢̢̢̡̨̧̡̡̛̛̛̛̱̣̼̖͕̯̼̺̙̺̦̥͎̼̥̥̩̩̥̝̪͖̺͔̳̥̰̖̤̪̱̹̬̫̬͔͉̟̙̮̳̦͍͇̺̠̗̬͎̙̪̳̠̻̭̹̖͇͇̜̪̟͙̮̘͎̬͉̺͚̲͖͔̲̼̮͍̰͔̬̣̹͇̮̳̤̙̤̣̦̯̞̻̼̘̩̯̪̪͔̱̻͎͇̖͇͎͖̪̰̲̫̗̦̺̩̟̬̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͑̌̆ͩ̍͆͋͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̀ͥ̐͐ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓̀̄ͩͪ̓ͦ͆̈̇̐ͪͤͨͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎ͤ̅ͨͨ̌ͥ̾̐ͤ̌́̊̒ͨͮ̏͌̚̕͘̚͘̕͢͢͢͢͜͟͝͞͝ͅͅͅẍ̵̷̢̨̡̡̡̛̯̭̫̣͎͍̙͓̬̲̗͎̠͉̦͓̻̤̖͖̙̼̭͇̻̹̭͈̜̻̥̱̬̯̪̦̻̣̣̝̠̝̯͇̠̭́́͌̇̾̂̔̋̑͛̔͛ͦ̍̄́͂ͯ̓͌ͣ͌͛ͭ̊́̈̆͐̈́̋͒ͣ̉͊͛̆ͦͮ̅́̑͑ͭ͗̄͑͋̅ͣͧ͊̆ͯͤ̓̔̀̒ͧ̕̕͢͟͜͟͢͠͞͠͠ͅͅ
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ VARIANCE CONTROL ━━━</span></span>
+
+  <span class="dim"># Zero variance — perfectly uniform marks per char</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Uniform uniform uniform&quot; --intensity 8 --variance 0 --seed 42</span>
+  U̡̡̗̮̗̠̹̯͌́̏̌͑ͪ̄͘͜n̸̜̜͎̲͉̯͙͆ͥ̀ͥ͒̒̈ͭͅi̶̢̨̨̤̙̜̤̳̔̓ͦ͋ͨ̈́͒̂f̸̢͚̹̰̻͎͈̗̋̎ͬ͌͊̉̈͘ȏ̢̬̣̰̣̱͔̩̎̋ͬͩ̑͐̕͡ř̨̘͚̯͙͎̖̼ͯ́̅̂̆͋ͤ͜ṃ̛̮̟͕͓̥̹̲͑͂̎͌̆̽ͭ͡ ü͓͍̥̘͓͖̙̭͛͂ͣ͂̀̑́͢ñ̡̯̠̥͚̹̫͛ͣ̇̿̓̎ͨ͜ͅí̢̢̡͔͎̙̺̝̆̌̒͆̌̌̃͞f̛̬̺͚̜̩̦͎ͬ̈́̾ͤͥ̊̅͜ͅơ̰̘͚͍͙͕͎̟̍̊̽̏̍ͫ̽͡r̪͙͚̰̼̞̥͙̿̋̃̔ͯ̎ͤ̚͜m̢̢̙̠̲̺̝͔̈́͂͛̃͆̀ͧ̈͢ ư̶̩̺̥̥͇̙̬͚͆͋͆́ͬ̋͗n̵͍̻̲͚̹̖͉̥ͯ̄̋̎ͬͩͩ̔i̠̳̣̭͔͎̜̪͐ͬ̇̆̅̓̎͊͟f̴̛̙͓͔̰͍̱̞̝̏̀ͣ͌̎̓͘o͓̩̳̞͕͓͙͉̐ͪͤͨͪ̋̍̅͠r̷̡͈̜͓͎͉̬̥ͩ́̒ͬͥͨͥ͘m̩͚̯͖̝͙̟͙ͤ̌́̊̒ͨͮ̏͞
+
+
+  <span class="dim"># Full variance — wildly different per char</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Chaos chaos chaos&quot; --intensity 8 --variance 1.0 --seed 42</span>
+  Č̡̛̠̹̯͑ͪ̄́̌̀́͘hͥ͒̒̈ͭ̒̅̅ͧ͞͠ą̵̨̡̨̤̳̣͖̹̲̟̟͚̹̰̔̓ͦ͋ͨ̈́͒̂̌̏̄̌ͅǒ̷̢̡̰̣̱͔̩͚̮̜̘̜́̑̎̋ͬͩ̑͐ͫ̕͜s̷̜̫̫͖͓̣̮̃̔ͯ͂ͮͨ̀͗͑͂͞ c̵̯͈̯̖̦̖͕͓͍̥̘͓͖̙̐͌͊͠h̡̛̯̠̥͚̹̫̮̝̦̱ͣ̇̿̓̎ͨ̋ͅa̙͋̌ͪͨȯ͉̠̜ͬ̈́̾͠s̶̢̠̫̪̤͕̫͑ͯ̅̒ͨ͘̚ c̪ͯͦͮͫͧ̉̿̋̃̔ͯ̎ͤ̚͜h̢̢̝͔̲̳̪̱̯͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͟͞ą͓̞͍̻̲͚̹̖͉̥̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩ̕ŏ̵̪̤̅̓̎͊͗̋͋̎̿ͪ͡s̷̰̪̖̙͓͔̰͍̱̞͟
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ PATTERN MODES ━━━</span></span>
+
+  <span class="dim"># wave — sinusoidal intensity</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The wave rolls through the darkness&quot; --pattern wave --intensity 20 --seed 42</span>
+  Ť̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞h̸̢̢̳͎̱̼̘̤̙̜̅̅ͧ͊ͥ͂ͮ͘͝͠e̢̡͎͈̗̥̣͖͓̥̹̩̔̋̎ͬ͌͊̉̈̔ͯ͘͟͞͝ w̷̛̹̜̫̫͖͓̣̮̟͕͓̥̹̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂ͮͨ̀͗̕͟͝a̷̡̡̢̡̢͓̪̯̠̥͚̹̫̮̝̦̱̙̳͔͎͂ͣ͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ̇̿͝ͅv̢̢̛̛͚̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̋̇ͬ̈́̾ͤͥ̊̅͜͟͟ẽ̵̢̢̢̛͙̙̠̲̺̝͔̲̳̪̱̯͖̠̼̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆͝͡ ȓ̴̷͖̝̝̜̰̣̲̼̠̳̣̭͔͎̜̪͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͞͠͞ơ̡̢͎͔̜͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜͌̎̓̀̄ͩͪ̓ͦ͆̈̇̐͘͡͠ͅl̸̷̨̛̖͕̯̼̺̙̺̦̥͎̼̥ͥ̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̆ͮ̉ͭ̎̅̑͊̕͘͟͝͝ͅl̶̡̢̛̛͔͉̟̙̮̳̦͍͇̺̠̗̬͎̙̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾͜͜s̢̛͖͔̲̼̮͍̰͔̬̣͒̀̍͐̀͛ͣ̅̉ͭ́̂̍ͧ̾͟͢͠͞ͅ t̨̧̡̡͎͇̖͇͎͖̪̰̲̫͋̏̄̏̎̑͂̇̌͒͒̃͂̋̚̚͜͟͡͞ͅh̴̨̡̨̹̝̬̘̦͇͇͍̣̙̖̯̉̾̇͋́̚̕͝r̵͙̜̗̥̺͙̩̼̙̻̳̜͇ͣ͌͛ͭ̊́̈̆͐̈́̋͒ͣ̉͊͛͠ơ̫͙̣͉̯ͯͤ̓̔̀̒ͧͦ̅ͭ͋͟͠ͅų̡̗͎̠͉̦͓̻̎ͧͦ̄ͩ̍̾͞ḡ̡̹̭͈̜̻̥̱͗̿͛͟h̷̝̠̝̯͛̒͒̎ t͙̿͗h̊e daͨr̫̾k͍̩̙̿n͇̲̓̐ͯ̆e̡̡͖̺̽̽ͨͯ̐͋͞ͅs̶̼̻̫̻̀̽͆̐s̷̵̛̻̻͖̮̭̙̗̫̦͐ͬ͂͌ͪͦ̃̉̐͛̈́
+
+
+  <span class="dim"># fade-in — builds from nothing</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Growing horror approaches&quot; --pattern fade-in --intensity 25 --seed 42</span>
+  Gr̙ͪò̠́w̦̞͆ͥ̀ͥ͟į̰̅ͧ͊ͥ͂͘͢n̵̨̨̡̤̳̣͖̈́͒̂̌̏̄̌g̢͈̗̥̈̔ͯ͌̓͑͘͡ h̷̢̡̰̣̱͔̩͚̮̜̘̜ͩ̑͐ͫ̾̕õ̵̫̫͖͓̣̮̟͕͓̔ͯ͂ͮͨ̀͗͑͂̎͞r͍̥̘͓͖̙̭̙͇͇̝̬̈͛͂ͣ͂̀̑́͢͡r̸̢̡̢̢̡̛̙̳͔͎̙̺̝͖̱̬͈̋͂̋̑ͯ͌̽́̆̌͘͞ơ̛̛͎̰̘͚͍͙͕̾͑ͯ̅̒ͨ̍̊̽̏̍͘̚͢͜ṟ̴̢̢̛̮͎̞͙̙̠̲̺̝͔̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂̚͟ ą̷͓̞͍̻̲͚̹̖͉̥̺͖̝͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̕͢͡p̷̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔̎͊͗̋͋̎̿ͪͧ̅͜ͅp̶̢̥͈̗̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̜̫̥̲̮̋̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎ͤ̅̚͘͜͡͡͠ͅr̸̷̵̡͖̺͔̳̥̰̖̤̪̱̹̬̫͒̀ͫ͂͗͐̔̃͐̒̑ͧ͗̐̑͘̚͜ỏ̶̴̢̢̜̪̟͙̮̘͎̬͉̺͚̲͖͔̲̼̮͍̰͔̬̣̹̄́͋̒ͦ͛͑̌̊́̍̿ͧ̄͋̊͒̚͜͞͠͠ͅȁ̡̡̨̡̛̲̫̗̦̺̩̟̬̝̳̗̩̰̗̹̝̬̘̦̄̏̎̑͂̇̌͒͒̃͂̋ͪ͆͒ͨͣ̔̀̓͛ͧ̚̚͢͜͟͝ç̴̷̨̧̩̼̙̻̳̜͇͎̲̝͚͈̪̮͎͍̜͙̳͍̼̫͙ͦ̍̄́͂ͯ̓͌ͣ͌͛ͭ̊́̈̆͐̈́̋͒ͣ̉͊͛̆ͦͮ̅͟͢ͅh̷̴̵̡̛̼̭͇̻̹̭͈̜̻̥̱̬̯̪̦̻̣̣̝̠̝̯̿̎ͧͦ̄ͩ̍̾͊̔́ͧ̊̋ͤ̒͘͟͢͡ͅe̴̵̡̥͚̝͇̲͈̮̫̫͎͚̥̳̲͖̿͗ͮ́̏̅̊̌̉̀͂̏ͮ̓͒̆ͨ̿ͨ̈́̾̽̊̂ͬ̿ͦ̄͋̚͝ͅs̛̙̟̥̱̤̝̻̻͖̮̭̙̗̫̦̣̜͙͍̱͖͚̺̣̗͇̬̹̈̉̄̀̽͆̐̌͒͒̽͑ͫͤ͋͐ͬ͝͞͡͠ͅ
+
+
+  <span class="dim"># fade-out — dissolves to nothing</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Fading into silence&quot; --pattern fade-out --intensity 25 --seed 42</span>
+  F̨̢̢̨̨̡̛̰͍̳͎̱̼̘̤̙̜̤̳̣̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͘͟͢͝ą̵̴͚̯͙͎̖̼̺̯̣̹̜̫̫͖͓̣̮̟͕͓̥̹̲̞͇̉̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂͘̕̕͜͞͠d̶̷̡̢̡̢̢̡̛̮̝̦̱̙̳͔͎̙̺̝͖̱̬͈͉̠̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ̇̿̓̎ͨ̋͂͟͢͜͞i̷̶̡̨̛͎̰̘͚͍͙͕͎̟̭̩̘͚̣͈̬̪̾͑ͯ̅̒ͨ̍̊̽͘̚͢͜n̶̸̷̷̡̨̛͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̹̖͉̥͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͑̌̆ͩ̍͆͋͆́ͬ̋͟͟ğ̴̴̡̛̰͍̱̞̝̥͔͉͎͔̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓͘͜͡͡ i̷̡̢͉͓͉̣͈̜͓͎͉̬̥͈̗̠̦͓͙̤ͩ͋̈ͬͨͮͥͩ́̚͘͢n̴̨̛͕̯̼̺̙̺̦̥͎̼̥̥̩̩̥̝̪͖̺͂ͬ̆ͮ̉ͭ̎̅̑͊́̈́̎͘̕͟ͅt̶̢̛̠̗̬͎̙̪̳̠̻̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͋̒ͦ͟͠ờ̺͚̲͖͔̲̼̮͍̰͔̬͛ͣ̅̉ͭ́̂̍ͧ͜͠ͅ ș̷̢̯̞̻̼̘̩̯ͣ́͋̏̄̏i̴̧͇͎͖̪ͪ͆͒ͨͣ̔ͅľ̵̛̬̝̳̗́̒͑̚e̸̡̦͌̇̾̂ņ̯͚ͦ̍̄́c̠̖͛ͭe
+
+
+  <span class="dim"># pulse — square wave on/off</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;On and off and on and off&quot; --pattern pulse --intensity 15 --seed 42</span>
+  Ơ̦̞͙̦̜̜͎̲͉̯͙̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀͘͟͠ͅn̸̶̷̨̢̡͖̹̲̟̟͚̹̰̻͎͈̗̥̣͖͓͋ͨ̈́͒̂̌̏̄̌̅̏͋̔ͅ ą̵̴̵̳͈̪̘͚̯͙͎̖̼̺̯ͫ̾̎̍̓̎͆ͪ̌ͯ́̕n̵̛͈̯̖̦̖͕͓͍̥̽ͭͩ̎̀̉ͫͨ̐͌͊͠͝d̷̶̡̢̡̢̢̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̄̿̃͛ͣ̇̿̓͜͡ͅ ơ̵̢̢̡̛̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̈́̾ͤͥ̊̅̾͑͘͢f̴̢̢̛̱̮͎̞͙̙̠̲̺̝͔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͟f̶̷̨͓͓̞͍̻̲͚̹̖͉̥̺͖͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̕͢ a̵̤̖͇̹̣̰̪̖̓̎͊͗̋͋̎̿ͪͧ͜ͅn̶̶̵͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜͓̓ͦ͆̈̇̐ͪͤͨ͡ͅd̢͈̾̐ o͙ͨn̯ͮ ạ̜̉ͭn̮͊d̖͒ ǫ̙͐͘f̥ͧ͗f̝̐
+
+
+  <span class="dim"># crescendo — exponential ramp up</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Slowly then all at once&quot; --pattern crescendo --intensity 30 --seed 42</span>
+  Slow̗ḻ̌y̞͙͒̒ t̯ͧ͊ͥͅh̶̢̤̙̜ͦ͋ͨ̈́͒̂e̲̟̟̔̋̎ͬ͞ͅṇ̴̷̡͖͓̥̹̩̓͑ͧͣ̌ ą̘͚̯͙͎̖̍̓̎͆ͪ̌ͯ́̅̂̆͋̕͜͠l̛̞͇̯͈̯̖̦̖͕͓͍̎͌̆̽ͭͩ̎̀̉ͫͨ̐͞͞l̡̡̢̡̪̯̠̥͚̹̫̮̝̦̱̙ͭ̄̿̃͛ͣ̇̿̓̎͡ͅ a̵̢̢̡̛̛̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭ͨ̃̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͑͘͢t̢̢̛͎̞͙̙̠̲̺̝͔̲̳̪̱̯ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͞͝ o̷̠̳̣̭͔͎̜̪̤̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̀ͥ̐͐ͬ̇̆̅̓̕͟͞ͅn̶̷̷̸̨̨͚̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕̯̼̺̙̺̦̥͎̼̥̥̩̩̋̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎ͤ̅ͨͨ̌ͥ̾̐ͤ̌́̚͘͢͡͞ͅͅc̡̢̢̢̛̠̗̬͎̙̪̳̠̻̭̹̖͇͇̜̪̟͙̮̘͎ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͋̒͟͠͠ę̸̸̶̧̡̡̨̡͎͇̖͇͎͖̪̰̲̫̗̦̺̩̟̬̝̳̗̩̰̗̹̝̬̘̦͇ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͂̇̌͒͒̃͘͜͟͝͡͞ͅ
+
+
+  <span class="dim"># decrescendo — exponential ramp down</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Overwhelming then calm&quot; --pattern decrescendo --intensity 30 --seed 42</span>
+  Ơ̢̢̨̨̡̨̼̘̤̙̜̤̳̣͖̹̲̟̟͚̹̰̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͘͘͞͡͝ͅv̴̷̛̹̜̫̫͖͓̣̮̟͕͓̥̹̲̞͇̯͈̯̖̦̖͕͓͍̥̘͓͖̙̭̙͇͇̝̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂̕̕͢͟͟͡͝e̶̵̢̛̬͈͉̠̜̪̪̬̺͚̜̩̦͎̠̫̪ͨ̋͂̋̑ͯ͌̽́̆̌̒͆̌̌̃͋̌ͪͨ̃̍͘͟͢͝ͅr̢̢͙͚̰̼̞̥͙̱̯̘̱̮͎̞͙̙̠̲̺̝͔̲̳̪̱̯͖̠̽ͨ̓̂ͯͦͮͫͧ̉̿̋̃̔ͯ̎̚͜͜͠ͅw̵̝̜̰̣̲̼̠̳̣̭͔͎̜̪̤̖͇̹͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̀ͥ̐͢͞h̶̶̛̜͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̀̄ͩͪ̓ͦ͆̈̇̐ͪͤ͡͡ͅe̷̸͚̯͖̝͙̟͙̣̜ͨͨ̌ͥ̾̐ͤ̌́̊̒ͨ͢͞l̸̴̦̥͎̼̥̥̩̩̥̝̪͊́̈́̎͒̀ͫ͂͗͐̕͘͞m̸̡̢̢̛͇̺̠̗̬͎̙̪̳̠̻̭̹͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͞͠i̴̶̛͎̬͉̺͚̲͖͔̲̼̮͍̅̉ͭ́n̷̷̢̦̯̞̻̼̘̩̯̪̿̎̍͌ͣ́͋̏̄ģ̴̡̡͇͎͖̪̰̲͆͒ͨͣ̔ͅ t̝̳̗̩͑̉̾̚ḣ̡̨̦͇̾̂̔ȩ̹̄́͂͢n̖̞ͭ̊ c̡alm
+
+
+  <span class="dim"># spike — peak in the center</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The center cannot hold&quot; --pattern spike --intensity 25 --seed 42</span>
+  Th̡̗̮ͪ̄͜e̖͉̻̦̞͂̌͆͠ c̴̶̢̤̙̜̤̳̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͒͘e̢̡͎͈̗̥̣͖̎ͬ͌͊̉̈̔ͯ͌͘͟͝n̸̛̯͙͎̖̼̺̯̣̹̜̫̫͖͓̣̮̟ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̕̕͢t̷̶̡̢̯̠̥͚̹̫̮̝̦̱͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ͣ̇̿͜͝͡ͅě̵̢̢̪̬̺͚̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍ͪͨ̃̍͐̋̇ͬ̈́̾ͤͥ̊͜ͅr̶̵̶̢̡̨̛̪̱̯͖̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̹̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͆͑̚͡͞͞ c̵̷̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔͉͐ͬ̇̆̅̓̎͊͗̋͋̎͜͜͡͡ͅa̶̴̶̷̤̹̩͚̯͖̝͙̟͙̣̜̫̥̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎ͤ̅ͨͨ̌ͥ̾̐ͤ̚͘͢͡ͅn̵̡͔̳̥̰̖̤̪̱̹̬̫̬͔͉̟̙̈́̎͒̀ͫ͂͗͐̔̃͐̒̑ͧ͗̐̑̐͘̚̚͜͢͟n̴̵̢̪̟͙̮̘͎̬͉̺͚̲͖͔ͦ͛͑̌̊́̍̿ͧ̄͋̊͒̀̍͐̚͠͠o̵̶̡̨̻̼̘̩̯̪̪͔̱̻͎͇ͦ̓ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͘͝t̶̶̛̫̗̦̺̩̟̬̝̳̗̩̰̗̹̝ͧͭ͛̓͊ ḩ̴̖̯͚̹͈̋̑͛̔͛ͦ̍o̡̻͇̟̲̝̊́̈̆͐͝ͅĺ̩̑͑͢d
+
+
+  <span class="dim"># sawtooth — repeating ramp</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Again and again and again&quot; --pattern sawtooth --intensity 20 --seed 42</span>
+  Ag̙ͪà̗ǐ̖͉̻͆͠n͎̲͉̯̒̅̅ͅ a̷̢̙̜̤̳ͦ͋ͨ̈́͒̂̌n̨̟͚̹̎ͬ͌͊̉͟d̷̢̹̩͕̬̣̰̣̱ͣ̌́̑̎̋ͬ͡ a̛͙͎̖̼̺̯ͯ́̅̂̆͋ͤ̃̔ͯ͝g̛̥̹̲̞͇̽ͭͩ̎̀̉͡͡à̵̡̙͇͇̝̬̰̣͓̪̑́ͬͩͦ̐̃ͩͭ͜ȋ̴̶̢̡͔͎̙̺̝ͯ͌̽́̆̌̒͆̌̌͞n̢̛̛̤͕̫͎̰̘͚͍͙͕ͤͥ̊̅̾͑ͯ̅̒ͨ̍̊͘̚͜͜ a̢̛̘̱̮͎̞͙̙̠̲̺̝͔̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́̚͟͝n̷̴̡̨̛̬͚͚̙̣͖͓͓̞͍̻̲͚͆́ͬ̋͗̍͐̐̕͠d̤̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔̐͐ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅͜ͅ a̵̡̢͉̬̥͈̗̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̋̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎̚͘͠͡͡g̨̙̺̦̥͎̼̥̥̩̩̥̝̪͖̺͔̳̥̰̖̑͊́̈́̎͒̀ͫ͂̕͟͟͟a̶̶̢̢̗̬͎̙̪̳̠̻̭̹̖͇͇̜̪̟͙͐̾̽̋̿ͪͤ̉̄́͋̒ͦ͛͟i̢̳̤̙̤̣̦̯̞̻̼̘̩̯ͧ̾ͥ͐ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌͘͠͝n̴̸̨̡̨̛̛̩̟̬̝̳̗̩̰̗̹̝̬̘̦͇ͪ͆͒ͨͣ̔̀̓͛ͧͭ͛̓͊̌̌͟
+
+
+  <span class="dim"># heartbeat — double-beat cardiac rhythm</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Can you hear it beating&quot; --pattern heartbeat --intensity 25 --seed 42</span>
+  Can ý̠̹ǫ̵͎̲͉̯͙̰͍ͥ̀ͥ͒̒̈ͭ̒̅ͅu̶̴̷̷̡̢̡͖͓̥̹̩͕̬̣̰̣̱͔̩͚̮̜̘̜̳͈͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑͘͡͠ h̵̫̫͖͓̣̮̟͕͓̥ͯ͂ͮͨ̀͗͑͂̎͌e̖̦͛͂ͣ͝ḁͦr̵̡̬̰̣͓̪̯̠̥͚̄̿̃͛͠ͅ ĭ̶̡̝͖̱̬͈͉̠̜̪̌̒͆̌̌̃͋̌ͪͨ̃͟t͚̜͑ beating
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ WAVE FREQUENCY &amp; PHASE ━━━</span></span>
+
+  <span class="dim"># wave with 2x frequency — faster oscillation</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Faster faster faster faster&quot; --pattern wave --wave-freq 2 --intensity 20 --seed 42</span>
+  F̡̛̯̱͉̖͉̻̦̌͑ͪ̄́̌̀́̊͘͞a̢̢̨̨̱̼̘̤̙̜̤̳̅̅ͧ͊ͥ͂ͮ̔͘͝͠͞͡s̴̷̷̡̢̡̨͖͓̥̹̩͕̬̣̰̣̱͔̩͚̮̜̘̜̳͈̪̘͌͊̉̈̔ͯ͌̓͑ͧͣ̌͘t̷̴̡̡̢̡̛͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱̙̳ͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬͩ͠͡ͅẽ̵̸̢̢̡̨̛̛̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̩̘͚̣͈̍͐̋̇ͬ̈́̾ͤͥ̊̅͜͟͟͢r̶̢̢̢̡̝͔̲̳̪̱̯͖̠̼̩̺̥̥͇̙̬͚͚̙̣ͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄͟͞ f̵̵̰̣̲̼̠̳̣̭͔͎̜̪̔̈ͦ͒͊ͯ͌̀ͥ̐͐ͬ̇a̰̪̖̙͓͔͌̎͘s̝̈te̜̍r͓̗͋̈ͬͨͮ͠ͅ f̷̶̴̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̜ͨͥ̎ͤ̅ͨͨ̌ͥ̾͠ḁ̷̷̥̩̩̥̝̪͖̺͔̳̥̰͊́̈́̎͒̀ͫ͂͗͐̔̃͐̕͘͟͡s̸̡̢̢͍͇̺̠̗̬͎̙̪̳̠̻̭̹̖̈́͐̾̽̋̿ͪͤ̉̄͝͞t̷̴̢̛̤̣̦̯̞̻̼̘̩̯̪̉ͭ́̂̍ͧ̾ͥ͐ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌͘͠͝͞ę̶̶̡̨̛̫̗̦̺̩̟̬̝̳̗̩̰̗̹̝̬̘̦͇͇͍̣̙͆͒ͨͣ̔̀̓͛ͧͭ͛̓͞r̵̵̡̰̻͇̟̲̝͍͙̜̗̥̺͙̩̼̙̻̳̜͇͎̓͌ͣ͌͛ͭ̊́͟ͅ f̛̜͙̳͍̼̫͙̣͉ͤ̓̔̀̒ͧ͠ͅa̢̙͓̎ͧ͘͠ste̤̖ͩ͟r̥̱̬̯̪̦̿͛͑͌̿ͤ̅̌͟ͅ
+
+
+  <span class="dim"># wave with 3x frequency</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Rapid oscillation across text&quot; --pattern wave --wave-freq 3 --intensity 20 --seed 42</span>
+  Ř̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞a̴̢̢̨̨̡̤̙̜̤̳̣͖̹̅̅ͧ͊ͥ͂ͮ̔̓ͦ͘͟͞͡͝p̷̡̨͔̩͚̮̜̘̜̳͈̪̘͚̯͙͎̖̼̺̯̣̹̜̈̔ͯ͌̓͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̕͝͞i̷̴̡̡̢̡͓͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱ͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬ͡͠ͅd̠̜̪̪̬̺͚̜̩̦ͪͨ̃̍͐̋̇ͬ̈́͜͠͠ͅ ơ͕̫̽̏̍sc̟̭ͫͧi̪͙͚̔ͯ̎ͤ͜l̶̢̝͔̲̳̪̱̯̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̄̊͟͞l̷͖̝̝̜̰̣̲̼̠̳̣̭͔͎̜̪̤̖͇̹̣̍͐̐̑͛̃̾ͯͯ̄̋̎ͬͩͩ̔̈ͦ͒͊ͯ͌̀ͥ̕͞à̴̡̢̦͕͉͓͉̣͈̜͓͎͉̬̥͈̗̠̦̄ͩͪ̓ͦ͆̈̇̐ͪͤͨͪ̋̍̅ͣͩ͋̈ͬͨͮ̚͟͠͡t̸̴̷̛̥͎̼̥̥̩̩̥̝̪͖̺͔̳͌ͮ͂ͬ̆ͮ̉ͭ̎̅̑͊́̈́̎͒̀ͫ͂͗̕͘̕͘͟͞ȉ̵̡̛̦͍͇̺̠̗̈́͐̾̽̋̿ͪͤ̉͝͞ō̢̹̖͇͇̜̪̟͙͋̊͒̚͜n͉ͧ̾ a̮͍̰ͭͪ͊͟c̵̢̡̻̼̘̩̯̪̎̍͌ͣ́͋̏̄̏̎̑͝r̶̶̴̛̦̺̩̟̬̝̳̗̩̰̗̹̝̬̘͒ͨͣ̔̀̓͛ͧͭ͛̓͊͜o̵̵̡̰̻͇̟̲̝͍͙̜̗̥̺͙̩͛̔͛ͦ̍̄́͂ͯ̓͌ͣ͌͛ͭ̊́͟ͅs̢̨̡̛̛̭̫̣͎͍̙͓̬̲̗͎̠͉̦͓̻̤̖͖̙͋̅ͣͧ͊̆ͯͤ̓̔̀̒ͧͦ̅ͭ͋ͦ͒ͮ̎͘͠͝ͅs̶̶̢̛̭̼͙̯̤̜̠̟̖̯̤͙̰̻̝͓̭͓̱̬͑͌̿ͤ̅̌͒̐̈́̿͂͛̒͒̎̍̆̊̆͂͠ t̘̞̰ͬ̿ͦ̄̚͞eͣxt̡̡͖ͨͯ̐͋͞ͅ
+
+
+  <span class="dim"># wave with phase offset (pi/2)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Shifted starting point&quot; --pattern wave --wave-phase 1.5708 --intensity 20 --seed 42</span>
+  Š̵̵̨̢̛͎̲͉̯͙̰͍̳͎̱̼̘̤͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒͘ͅh̵̸̢̡̹̰̻͎͈̗̥̣͖͓̏͋̔̔̋̎ͬ͌͊̉͘͢į̴͚̯͙͎̖̼̺̯̣̹̜̫̫͖͓ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆̕͜͞͠f̥̘͓͖̙̭̙͇͇̝̬ͫͨ̐͌͊̈͛͂ͣ͂̀̑́͢͡͠t̶̴̢̢̡̛̳͔͎̙̺̝͖̱̬͈͉̠̜̪̪̬̋͂̋̑ͯ͌̽́̆̌̒͆̌͘e̴̡̨̛͙͕͎̟̭̩̘͚̣͈̬̪͙͚̰̅̒ͨ̍̊̽̏̍ͫ̽ͨ̓̚͢͡d̴̢̢̠̲̺̝͔ͮ̈́͂͛̃͆̀ͧ̈ͭ s̢̩̺͆́ͬ̋͟t̬͚̃a̎rt̻ì̥̺ͥn̠̳̅̓̎͊͗g̴̛͇̹̣̰̪̖̙ͧ̅̏ͅ p̵͙͉͓̗̦͕͉͓͉̣͈ͦ͆̈̇̐ͪͤͨͪ̋̍̅ͣͩ͋̚͢͡ͅǫ̷̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̌ͥ̾̐ͤ̌́̊̒͢͡͞ͅi̷̷̸̩̥̝̪͖̺͔̳̥̰̖̤̪̱̹̬̫͗͐̔̃͐̒̑͘͟͡n̴̸̢̢̳̠̻̭̹̖͇͇̜̪̟͙̮̘͎̬͉̺͚̲͖͔̲̼ͤ̉̄́͋̒ͦ͛͑̌̊́̍͜͡t̸̸̶̨̧̡̡͔̱̻͎͇̖͇͎͖̪̰̲̫̗̦̺ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͂̇̌͒͒̃͘͜͝ͅ
+
+
+  <span class="dim"># sawtooth with 3x frequency</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Ramp ramp ramp ramp ramp&quot; --pattern sawtooth --wave-freq 3 --intensity 15 --seed 42</span>
+  Ra̙̪ͪḿ̡̯̱͉̊͞p̸̜̜͎̲͉̯̒̈ͭͅ ṛ̸̶̨͖̹̲̟̟͚̹ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔ͅa̷̶̡̰̣̱͔̩͚̮̜̘̜̳͈̪̘ͣ̌́̑̎̋ͬͩ̑͐ͫ̕͜m̷̶̛͕͓̥̹̲̞͇̯͈̯̖̦̖͕ͮͨ̀͗͑͂̎͌̆̽ͭ͡͝p r̴͇͇̝̬̰̄̿a̷̡̹̫̮̝̋͂̋͘͢m̴̶̡̺̝͖̱̌̃͋̌ͪͨp̸̸̢̢̛̛͎̠̫̪̤͕̫͎̰̘̊̅̾͑ͯ̅͘ ṟ̴̢̢̛̮͎̞͙̙̠̲̺̝͔̲̳̪̱̯͖ͫͧ̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̚͟͝͝am̙̑͛p̨͓̞͍̻̲̄̋̎ͬ͡ ṛ̶̭͔͎ͥ̐͐ͬ̇̆̅̓̎͊͗͞à̴̙͓͔̰͍̱̞ͣ͌̎̓͘͜m̸̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈ͤͨͪ̋̍̅ͣ͡ͅp̷̷̨̹̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱̌ͥ̾̐ͤ̌́̊͢͡ͅ
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ UNICODE BLOCKS ━━━</span></span>
+
+  <span class="dim"># core only (default) — standard combining marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Standard marks&quot; --blocks core --intensity 10 --seed 42</span>
+  Š̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞t̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝ą̹̲̟̟̏͋̔̔̋̎͢ͅn̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕d̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞a̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡r̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝d̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢ m̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡a̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡r̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜k̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢s̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝
+
+
+  <span class="dim"># extended block — rare diacriticals</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Extended marks&quot; --blocks extended --intensity 10 --seed 42</span>
+  Ȅ᪷̥͉᫃̖᫃͖̬ͬͨ̆͂̂̏͌́̍͞ͅx̸᫄͎͈͙̘̥̩̆̆᪴ͣ᪱ͬ͑᫆͢͝t̢̡͓͍͚̮̓ͥ̾̾̎̒͢ȩ̷̶᪶᪹͇͉̯̥̻̝̘̞ͨ᪳ͯ̐̂̒̎᪻ͦ̀͆᫈ᫎ̚̚n̄̿᪾̵̧̢᪵̳̻̩͑᪼̀ͫͨ͑̒ᫌ᫇᫉᫇͜͞d̴᪺᪶̝̺̜ᫀᫀ̟ͮ͑ͯ͑̀́᪳᫋̚̕͡e᪶͂̎͑ͬ̎̕᪾̵̥̬͉̥̥̜͎̥ͦ̓͝d᪺̝̰̬̦̣̐ͧ̎̉͗͊ͯ᪱̍̆̓͂͆᫆͟͟͢ m᪹᪵̑̈́͒̃᪾̡̧̺̤̰̙̮᪳᪼ᫎ͢͡a᪼᪾̵̜̣͉͕̦̟̦͒ͫ̊̔᪼͑ͭ̄͌ᫌ᫈͘͘͡ŗ̴᪺̜̤᫊̮͐̎ͫ̐̀ͨ̔ͭᫎᫎ᫇᫇͘̚͜kͣ᪾̵̵̨̧̞͇͍͚̤͓̺̝ͦ̀᪲̔ͧ᫉᫅͢s᪶͈̠̟̪ͮͥ̒ͬ͒͂̀̅᫅͡͝
+
+
+  <span class="dim"># supplement block — additional diacriticals</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Supplement marks&quot; --blocks supplement --intensity 10 --seed 42</span>
+  S᷎̹̣̼͙̖͙͎̪̔᷈ᷜ̈͗̂̔ͨ̂̒᷶ü̧᷿͚̻͎̘̤̉ᷘ᷁ᷔͫᷳᷨ᷍͡ͅp̡͈͓̠̬̿᷄͋͋̓̾᷾ͅp̺̥̻̭̣̳̜̘̝᷉ᷘ᷑̃͂̾̓ᷡᷛ͂᷆͑ᷞͤᷪᷯ̕͞͝l̷̡̧̰̥̲̅͌ᷦͪᷤᷙ́᷌᷉ͫ̾᷵ᷰᷭᷩᷫᷩe̵᷐̜̱̙͕͕̞ͫ᷒ͪ̀̓́ᷠᷛᷗ́ᷭ᷼ṃ̷̩̼̤̣̙͇̤ᷛ͗̓ͫ̒͂ᷦ᷆͛ᷲ᷍e̢᷿̝̭̩̥᷸᷇̔̌ᷠͮͥ᷒ᷔ̑̉͗ͤᷨ̚͘᷶n̛᷽̠̱̣̭̙̬̦ᷟ͛ᷙͬ̄ᷦᷗᷤ᷻ᷯt̸̡᷏̜̼͉̤̞̥ᷢᷦͭ᷌̎̀ᷤͯͫ̅ͯͨ᷻ᷭᷪ m̶᷏̙̣̦̫ͯͪᷠ̓᷌͑᷈́͂ᷰᷯᷯᷬᷩᷩ̚a̷̷̢᷂̝̺̦͓͇̥̱̜ᷥ᷆̀ᷕ́᷇᷾ᷪᷧͅr̨᷎᷽̻̟̞᷑᷄̽ͬ̀̇ᷜᷳᷧ͘k̴̨̛͙͙̦͖̝̣͚̰͙᷸ᷝ̓̉᷒ᷜ͒᷃̎ᷠᷚᷤᷕᷛᷬᷨᷩᷨ͠s̡̞̦̝̓ᷚᷣ̿᷅͑ᷥᷳᷬᷮᷮ
+
+
+  <span class="dim"># symbols block — marks for symbols</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Symbol marks&quot; --blocks symbols --intensity 10 --seed 42</span>
+  S̍ͦ͛⃐̅̿́̍̈́́̌⃟̳̣̺͕̖͕͈̩y⃚͖̻͚̹͉̘̣̦̅̅ͭ͑ͫͦ͊⃰͢m⃫̻̠͍̠̪̑͗̌̐̚̚ͅb⃥̢̹̥̺̫⃯̱̜̘̝ͣͭͩ̎́̓̐̍⃗ͯ̓̽⃑́͘͞͞ỡ⃡͆⃜ͮ̀ͥͣ͊̐⃟̷⃓̮⃭͚̥̱̠⃨͚̦l̵⃭̜̰̙͓͓̞ͨ͊ͩ͆̀̔́⃖ͯͬ̓⃩ ṃ⃙̷̨̺̣̣̙̼̣ͯ̿̍͊ͦ̌̓⃡̀͘a̎͛̍̈⃗͌͂ͩͫ̋̆̿̿́⃢⃠̨̡̜̬͚̤⃰ȑ⃪̢̠̰̬̘̪⃯̥⃖̀ͮ͋̃⃡ͬ⃜⃧k̸⃥̡⃮̜̺͇̣̝̤⃛⃡͋ͥ̉̒⃜͌͊ͧ̃͐̈́⃧s̶⃓⃥̢⃯⃯̙̥⃬͚̪͐͆⃖̌ͥ̎̽͛̒̓ͧ
+
+
+  <span class="dim"># all blocks combined — maximum variety</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Everything at once&quot; --blocks all --intensity 10 --seed 42</span>
+  Ę⃓̛᷏͕ᪿ̖̱̾᷈ᷡ̊ͩ̃̾᪳̃ᷧᷧ᫇v⃫᷎᪷᷽͚̙̩̭̊̋ᷜ᷀ᷗ᷵ᷩ᫁ᷫ᫇e⃪᫃ᫀ̤̤̹͆᷃ͣͣ̽̓᫉r̨͙̫͚̺⃯͓̞̙̠᷉ᷛᷔ̿̃͐̈́̽⃐ᷟ͐᷆ͦᷤͮᷰᷮ͢ẏ⃓᪶᪷͈⃬̫͎̥̮᷷ͥ⃡⃗ᷝ́᷉̓ᷬᷯᷬ͜᷍t̶⃦̡᪷᪶⃬̞͍̝᷒ᷔ̀͑̂ᷥᷟᷚ͌ᫌᫌh̨̨᷎̛᪷̱ᪿ̩̝̩ᷟͪ̽͐⃡᷅ͫ᷻᫂͜ì᷇̽̏ᷦ᪻ͯᷕᷗ̋ͫͪͯ̚⃝⃘̟̻̱̪̦⃰ᷫń᪸ᷥͬᷝ̅⃡ᷚ⃗⃩⃤̨̤͍̻̜̹⃮̫g᷐᪹᪷⃖⃡̑͋⃗᪼̆᪼᪳᷍⃤⃭̞̥ᪿ̩̠̪᫅ᷭ͞ a̷⃥̧̛᪵᷹⃯⃯̝̫̳᪼ᷦ̀ͦ᷇͋͐᷑ᷭᷬ᷍ţ⃪̠͖̬ᫀ̫͍̞᷀⃜᷅̀ᷘ͋᷆᫈᫂ᷮᷪ͜͝ o̡᷏᪸᷽͚̣̯ᷓ᷃̓ͪ́̈ᷠ⃧ᷩn̵ᷢ̽́̋ᷔᷠͨ᷁̑ᷥᷞ⃛ᷘᷠ⃝⃥̨̬̠͈̮ᷳᷧᷫᷧᫎᷬᷫᷨᫎc⃨̠⃭̥⃭̫̠͒ᷞ⃗͆᷄ͧ⃛᷼e᪷᷀᪴ͥ᪻͂᷌̀ᷥ⃝⃞̳̝᫄̰̯᫅ᷪ᫈
+
+
+  <span class="dim"># mix specific blocks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Core plus symbols&quot; --blocks core --blocks symbols --intensity 10 --seed 42</span>
+  C̍ͦ͛⃐̅̿́̍̈́́̌⃟̳̣̺͕̖͕͈̩o⃚͖̻͚̹͉̘̣̦̅̅ͭ͑ͫͦ͊⃰͢ȓ⃫̻̠͍̠̪͗̌̐̚̚ͅe⃥̢̹̥̺̫⃯̱̜̘̝ͣͭͩ̎́̓̐̍⃗ͯ̓̽⃑́͘͞͞ p̛̃⃡͆⃜ͮ̀ͥͣ͊̐⃟̷⃓̮⃭͚̥̱̠⃨͚̦l̵⃭̜̰̙͓͓̞ͨ͊ͩ͆̀̔́⃖ͯͬ̓⃩ų⃙̷̣̺̣̣̙̼̣ͯ̿̍͊ͦ̌̓⃡̀͘s̎͛̍̈⃗͌͂ͩͫ̋̆̿̿́⃢⃠̨̡̜̬͚̤⃰ s⃪̢̠̰̬̘̪⃯̥̏⃖̀ͮ͋̃⃡ͬ⃜⃧y̸⃥̡⃮̜̺͇̣̝̤⃛⃡͋ͥ̉̒⃜͌͊ͧ̃͐̈́⃧m̶⃓⃥̢⃯⃯̙̥⃬͚̪͐͆⃖̌ͥ̎̽͛̒̓ͧb⃫̸̷̢̝̳̥̻͉̼̥̰⃨͙̜͑⃡̀ͫ̒͛͘o⃪⃚̧͖̺̟̞ͨ͗̐ͦ͋̿̀̄ͯl̴⃐̍̏̆ͩͯ̾͒̉⃖ͮ⃜ͫͯ⃣̧⃬͕͚͕̥͔̝͚͙̣͕̯͔͠s⃚⃬̝⃮̠⃮̥̝̔ͮ⃛̑͗̽⃜
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ MARK POOLS ━━━</span></span>
+
+  <span class="dim"># classic — matches traditional Zalgo generators (dense, chaotic)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The old ways&quot; --pool classic --intensity 10 --seed 42</span>
+  T̸̶̴̡̧̘̮̘̖̱̖̹͑͋ͣ̉̃̂̿̿h̷̵̶̵̡͙̻̳̹̘̤̊̊̓͑̀́͞ę̷̷̵̞̩̗̝̞̻̞̩͆ ơ̵̴̢̡͖̙̣̝̗͈̫̲̲̣̳̪͈̯̘͋̃ͨͥ̓̚͝͡l̶̴̵̪̺̻̝̭̣̯̟̥̇ͮͫ́͐͋͆͂̈́͂͟d̴̷̢͔̻͖̺̣̮̙̼̜̀̂ͧ͆̽̚͜͡ w̶̴̴̶̢̡̧̡̡̡̮̗̻̖͈̰̙͑ͮ͠a̴̶̶̷̧̢̛̗͙̯̯̳̪̟͊̎ͧ̿͗̊́̚̕y̷̷̛̱̞̮̠̪̘̩͈̣ͦ̽̅ͮͫ͟͜sͪͮ̽͏̷̷̴̴̸̡̢̠̼͓̟̜̑ͫ̀̆̀͆̓̚
+
+
+  <span class="dim"># curated — selective core marks (clean, reliable)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Refined corruption&quot; --pool curated --intensity 10 --seed 42</span>
+  Ř̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞e̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝f̨̹̲̟̟̏͋̔̔̋̎͢ͅḭ̷̶̡̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕ñ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞e̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡d̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝ c̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢o̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡r̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡r̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜u̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢p̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝t̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟i͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝ǫ̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟n̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝
+
+
+  <span class="dim"># dense — heavy stacking marks (thick, crossed-out)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Obliterated&quot; --pool dense --intensity 10 --seed 42</span>
+  O̷̡̥̦̲̠̲̱̤̎̾̾͆̅̏̅̍̐̅̍b̸̵̶̢̢̲̦̲̦̱̠̅̅̿̽̿̾̐l̸̡̡̦̦̱̤̎̽̏̏̍̎i̵̵̢̡̦̦̳̤̳̥̠̠̠̾̿̾̎̅̎̎̍͆̿̎̽̏͆̐t̷̴̶̢̡̢̥̳̲̥̳̲̅̏͆̐͆̿̅̾̾̐̎e̴̸̡̳̠̥̠̱̱̾̐̿̐̅̎̅͆̿̿̎r̶̴̢̢̡̢̤̦̠̦̿̏̍̐̾̍̎͆̽̏a̷̷̸̢̡̠̤̤̲̎̾̍̍͆̽̐̿̿̍̅̏̏̐t̸̸̡̡̢̥̤̠̤̳̎͆̏̿̐̅͆̿͆e̸̴̡̢̡̢̳̠̦̱̳͆͆̽̾̍̎͆̽̐̾̅̽̐d̴̶̡̢̳̳̠̳̲̲̤̽̐͆̍̾̎̏̾̎̎̾
+
+
+  <span class="dim"># geometric — lines, arrows, angular marks (glitch aesthetic)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;System error&quot; --pool geometric --intensity 10 --seed 42</span>
+  S̷̞̘̟̩̖̩̠̜̎͐͌͑̅͊̅̎͋̅̍y̸̶̷̩̟̪̞̠̖̘̙̅̅͑͌͑͐͋s̸̟̟̘̠̗̜̎͌̏̏̎̎t̶̵̞̙̟̪̜̘̫̞̗̖̗͌͑͐̎̅̏̎̎͒͑̏͌̏͒͊e̷̵̶̝̫̪̙̞̘̪̪̙̅̏͒͋͒͑̅͐͌͋̎m̵̸̫̗̝̖̩̩̗͐͋͐͋̅̏̅͒͑͑̏ e̷̵̘̜̟̘̘̖̟̘͑͊̎͋͐̎̏͒͌͊r̷̷̸̗̜̜̪̘̘̎͌̎̍͒͋͊͐͑̍̅͊͊͊r̸̸̗̝̘̜̖̜̫̙̎͒͊͑͋̅͒͑͒o̸̵̫̖̘̟̠̘̗̪̘͒͒͋͐̍̎͒͋͋͐̅͋͋r̵̶̫̫̖̘̙̫̪̪̜͋͋͒̎͐̎̏͌̎̏͐
+
+
+  <span class="dim"># full — all Unicode combining blocks (maximum variety)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Everything everywhere&quot; --pool full --intensity 10 --seed 42</span>
+  Ę⃓̛᷏͕ᪿ̖̱̾᷈ᷡ̊ͩ̃̾᪳̃ᷧᷧ᫇v⃫᷎᪷᷽͚̙̩̭̊̋ᷜ᷀ᷗ᷵ᷩ᫁ᷫ᫇e⃪᫃ᫀ̤̤̹͆᷃ͣͣ̽̓᫉r̨͙̫͚̺⃯͓̞̙̠᷉ᷛᷔ̿̃͐̈́̽⃐ᷟ͐᷆ͦᷤͮᷰᷮ͢ẏ⃓᪶᪷͈⃬̫͎̥̮᷷ͥ⃡⃗ᷝ́᷉̓ᷬᷯᷬ͜᷍t̶⃦̡᪷᪶⃬̞͍̝᷒ᷔ̀͑̂ᷥᷟᷚ͌ᫌᫌh̨̨᷎̛᪷̱ᪿ̩̝̩ᷟͪ̽͐⃡᷅ͫ᷻᫂͜ì᷇̽̏ᷦ᪻ͯᷕᷗ̋ͫͪͯ̚⃝⃘̟̻̱̪̦⃰ᷫń᪸ᷥͬᷝ̅⃡ᷚ⃗⃩⃤̨̤͍̻̜̹⃮̫g᷐᪹᪷⃖⃡̑͋⃗᪼̆᪼᪳᷍⃤⃭̞̥ᪿ̩̠̪᫅ᷭ͞ ȩ̷⃥̛᪵᷹⃯⃯̝̫̳᪼ᷦ̀ͦ᷇͋͐᷑ᷭᷬ᷍v⃪̧̠͖̬ᫀ̫͍̞᷀⃜᷅̀ᷘ͋᷆᫈᫂ᷮᷪ͜͝e̡᷏᪸᷽͚̣̯ᷓ᷃̓ͪ́̈ᷠ⃧ᷩr̵ᷢ̽́̋ᷔᷠͨ᷁̑ᷥᷞ⃛ᷘᷠ⃝⃥̨̬̠͈̮ᷳᷧᷫᷧᫎᷬᷫᷨᫎy⃨̠⃭̥⃭̫̠͒ᷞ⃗͆᷄ͧ⃛᷼w᪷᷀᪴ͥ᪻͂᷌̀ᷥ⃝⃞̳̝᫄̰̯᫅ᷪ᫈h̨᷽̖̭͚᫄͈͇͉ͧ͋̎ͩ⃐᷈ᷢ᷁ᷱͅẻ⃒̛͎̪᫄̖᷷᪴᷃͒ᷘ᷑᷈̿̂́᪰ᷜ̈᫇᫋ᫌ͟r᪵⃖̅́ᷜͭ⃠⃘⃯ᪿ⃬ᫀ͎ᷭ᫈e᷐̧᪵᷂̩̜̻͕̼̼͚᪰̓́᷃᷒̈́̈͊̈́͑᫇᫇ᷮ᫇ᷫᫌ᷼͝
+
+
+  <span class="dim"># pool + style combo — classic pool with heavy style</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Old school chaos&quot; --pool classic --style heavy --seed 42</span>
+  O̸̶̧̧̘̮̘̖͈̼̘̖̹̝͑͋ͣ̉̃̂̿̿͆̚l̷̶̷̶̶̡̡̨̨̛͙̻̪̹̘̤̤̠̣͑ͬ̽̚d̶̵̷̵̵̢̢̡̛̪͇͖̙̣̝̗̣̲̣̳̪͈̯̘̒͐̒ͭ̽͋̃ͨ̓̚͝͡ s̵̶̴̶̵̪̺̻̝͇̰̲̥̝ͮͫ́͐͋̌ͩ̈́͂͟͡c̵̴̵̶̷̴̢̡̧̺̣͔͕̣̫̠̱̻̠̥͈̬̰̜̀̂ͧ̆ͩ̉̇͂͜͡͡h̴̷̙̗̳̮̟͆ͤ̇͊̾̿̚̚͟ơ̵̴̷̬̥̱̮̬̲̘͈͇̞̮̠͐͊ͭ̊́̀́̕͟ͅo̝̲̮ͭ͗ͪͮ̽͏̷̠̳̱̼̘̳̯̞̑́͆̚l̶̶̷̸̢̛̮̠̺̪̥̦̼̙̭͈͈̙̠̣̍́̈́̚͢ c̶̴̶̵̶̡̩͎͈͚͉̞̮̫̤̖̣̻̲̫̖̙̑̓ͭ̀ͨ̎̌̋̽̓̈́́̽̓̈́̚͜h̶̴̷̷̢̛̛̗͖̭͇̗̻̦̣̐̎ͣͣ̋̿͂̾͂̿̾͘͟͢ͅâ̷̴̷̵̴̡̛͚̳̙̤̞͇̬̻̬̻̥̰̩̳ͫͬͨ̌͘̕͟o̻ͦ͏̵̵̷̶̨͉̥̥̪̪̥͒͊̇s̵̶̶̶̸̡̧̡̢̼̟̭̬̠̮̞̰̼̠̗͋ͤ̈́̀̓̾̿̚
+
+
+  <span class="dim"># pool + pattern combo — geometric pool with pulse</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Glitch pulse glitch pulse&quot; --pool geometric --pattern pulse --intensity 15 --seed 42</span>
+  G̸̷̜̗̫̜̗̗̪̟̩̠̞̫̎͐͌͑̅͊̅̎͋̅̍͌͋̎͋͑̅l̶̵̶̫̟̟̘̠̗̜̫̟̞̠̪̩̘̖̙̙̘̫̪͌͑͋͐̅̎̎̅̎̍̎͌̏i̵̵̵̟̩̝̖̜̫̞̫̪̖̠̠̞͒͊̎̎͋̎͋͑̏̎͒͋t̵̸̷̩̞̖̙̖̫̪̩̙͊͊͒͑̎͋̍͒͑̎͌͌c̶̸̶̵̞̠̘̙̫̟̝̞̗̘̜̟̘̘̖̟̘̪̪̖̘̠̅͊̅͐͐̍͊͋h̸̵̜̜̪̘̘̝̝̙̘̫̝̪̞̖̫̪̫̫̪̗̝̘͋͊͐͑̍̅͊͊͊͐͌ p̷̵̟̞̪̗̫̖̘̟̠̘̗̪̘͒̎͐͊͊͒͒͋͐̍̎͒͋͋u̵̶̸̪̪̜̗̪̠̟̫̟̖̩̙̟̫͋͋͒̎͐̎̏͌̎̏͐̅͊͒͒̅l̵̶̙̖̩̟̙̠̞̝̖͋̎͌͐̎͌̎͊͒͑s̸̵̵̵̩̪̜̟̗̫̪̫̩̪̖̠̙̫̩̪̩̙̩̗̪͋͑͋̍̍̏͑͐͑e̵̶̠̙̟̞̜̞̙̠̖̫̞̠̠̠̜̖̟̙̙̪͊̏͐̎̅̍̏͑͒̎͌̏͒͋͒̍͒̍͒̎ g̙͊͊l̪̟͌i̝̎t̝͊̎c̟̅͋h̘̘͌ p̖͑u̝͌l̩͐s̞͒e̩̠͊
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ MARK FILTERS ━━━</span></span>
+
+  <span class="dim"># accents — grave, acute, circumflex, etc.</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Accented text&quot; --marks accents --intensity 8 --seed 42</span>
+  Ȧ̽͂̂̍̀̇̐̚c̑̇̓̿c̋̅̈́̋e̓̿̽̑͆n̛̔́̓́̇̉t̉̔̌̌̆e̔̅̽̅̌͆d̀̾̇́̊̈̆̈́́ t̓̏̈̈̒̈̓e͆̐̃́̃̔̿̍̂̌͆x̛̀̑̈̃̎̚̕ẗ̐̅̓́̉̔̕
+
+
+  <span class="dim"># dots — dots, rings, diaereses</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Dotted text&quot; --marks dots --intensity 8 --seed 42</span>
+  Ḍ̣̥̥̣̥̈̊̊̇̉̇̈̉͘o̥̥̦̤̥̦̥̦̥̥̊̈̇̈̇̇̊͘͘͘ṫ̥̤̤̣̤̦̈̇̈ṭ̣̤̤̣̊̇̈̊̉̊̊͘͘e̦̥̣̣̣̥̦̊̈̉̈̈̉̈̉̈̈͘͘d̥̤̥̣̤̤̦̉̇̊̊͘͘͘ ṭ̤̣̦̦̦̤̣̇̈̊̊̇̊̉̊̉͘͘ẻ̥̥̣̤̦̇̊̊̇̉̉̈̉̈͘ẋ̦̦̣̣̥̣̣̦̈̈̉̈̈̇̊̈ṭ̤̤̦̣̣̤̤̤̣̇̇̉̉̉̊̊͘͘
+
+
+  <span class="dim"># lines — strokes, overlines, underlines</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Lined text&quot; --marks lines --intensity 8 --seed 42</span>
+  L̴̢̡̢̠̲̳̍̏̏̐̅̎̅̍̎i̴̢̡̢̠̳̲̳̲̳̳̍̅̐̍n̵̡̡̡̳̲̲̠̲̠̏̅̍̍̅̍̅̍̏e̵̡̡̡̢̡̳̳̲̳̎̏̐̏̍̅̍d̴̢̠̠̲̲̠̎̐̍̍̐̎ t̷̢̢̡̢̠̳̳̠̐̐̅̏̏̎̍ȅ̸̡̳̠̳̳̠̏̅̏̎̏̎̅̍̅̐x̶̡̡̢̢̡̡̲̳̲̠̏̅̎̎̍̐̎̍t̴̢̢̳̲̳̠̅̏̍̐̐̅̍̏̍
+
+
+  <span class="dim"># letters — medieval superscript letters</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Ancient text&quot; --marks letters --up 5 --mid 0 --down 0 --seed 42</span>
+  Aͣͦͥͬͫͮnͨͣͥcͣͥͫͪͥiͭͣͭͬͧeͯͧͤnͮͪͭtͩͯͧͪͭͫ tͪͬͣͥͦͤͦeͦͫͧxͥͦͯͫtͥͬͥͧͯͫ
+
+
+  <span class="dim"># arrows — arrow marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Directed&quot; --marks arrows --up 6 --mid 0 --down 0 --seed 42</span>
+  D͊͋͋͑͑͒͊i͊͋͐͊͋͐r͋͐͑͊͑͑e͊͒͌͊͊c͐͑͑͐͒͌͐͑t͒͐͑͊͋͋͊e͊͋͐͌d͋͋͒͐͐
+
+
+  <span class="dim"># hooks — hooks, horns, cedillas</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Hooked text&quot; --marks hooks --intensity 8 --seed 42</span>
+  H̡̡̧̢̛̦̦̓̒̔̒̓̔̕̕ơ̧̨̢̨̧̨̧̛̛̦̦̦̓̒̓̒̒̕̕o̧̢̢̢̢̨̒̓̒̓k̢̡̢̢̢̛̛̒̓̔̕̕̕̕ę̡̡̡̧̧̛̛̦̓̔̓̓̔̓̔̓̓̕d̢̧̡̨̛̛̛̦̦̦̔̒̕̕ t̡̢̡̨̨̨̢̡̛̛̒̓̒̔̔̕̕̕̕ȩ̢̢̨̛̦̔̒̒̔̔̓̔̓̕̕x̨̨̡̢̧̢̡̨̒̓̓̔̓̓̒̓̕ț̡̢̨̢̡̢̢̛̛̦̦̒̒̔̔̔̕̕
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ CHARACTER FILTERING ━━━</span></span>
+
+  <span class="dim"># Default: spaces are skipped</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Spaces are clean&quot; --intensity 10 --seed 42</span>
+  Š̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞p̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝ą̹̲̟̟̏͋̔̔̋̎͢ͅc̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕ẽ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞s̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡ a̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝r̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢e̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡ c̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡l̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜e̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢a̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝n̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟
+
+
+  <span class="dim"># No skip spaces — corrupt everything</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Spaces are dirty&quot; --no-skip-spaces --intensity 10 --seed 42</span>
+  Š̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞p̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝ą̹̲̟̟̏͋̔̔̋̎͢ͅc̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕ẽ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞s̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡ ̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝a̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢r̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡e̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡ ̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜d̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢i̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝r̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟t͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝y̨̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟
+
+
+  <span class="dim"># Skip punctuation</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Hello, World! How are you?&quot; --skip-punct --intensity 10 --seed 42</span>
+  Ȟ̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞e̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝l̨̹̲̟̟̏͋̔̔̋̎͢ͅl̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕õ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞, W̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡ơ̵̡̢̡̢̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝r̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢l̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡d̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡! H̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜o̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢w̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝ a̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟r͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝ę̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟ y̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝ṓ̸̶̢̻̭̹̖͇͇͋̒ͦ͛͑̌̊́̍̿ͧ̄͞u͚̲͖͔̲̼̮ͭ́̂̍ͧ̾͟͠?
+
+
+  <span class="dim"># Skip numbers</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Agent 007 reporting at 0900&quot; --skip-numbers --intensity 10 --seed 42</span>
+  Ǎ̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞g̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝ę̹̲̟̟̏͋̔̔̋̎͢ͅn̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕t̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞ 007 r̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡e̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝p̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢o̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡r̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡t̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜i̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢n̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝g̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟ a͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝t̨̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟ 0900
+
+
+  <span class="dim"># Only ASCII letters</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;cafe 123 ok!&quot; --only-ascii --intensity 10 --seed 42</span>
+  č̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞a̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝f̨̹̲̟̟̏͋̔̔̋̎͢ͅḛ̷̶̡̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕ 123 õ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞k̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡!
+
+
+  <span class="dim"># All filters combined</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Hello, World! 42 is the answer.&quot; --skip-punct --skip-numbers --only-ascii --intensity 10 --seed 42</span>
+  Ȟ̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞e̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝l̨̹̲̟̟̏͋̔̔̋̎͢ͅl̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕õ̵̫͖͓̣̮̟͕͓̥̔ͯ͂ͮͨ̀͗͑͂̎͜͞, W̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡ơ̵̡̢̡̢̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝r̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢l̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡d̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡! 42 i̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜s̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢ t̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝h̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟e͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝ ą̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟n̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝s̸̶̢̻̭̹̖͇͇̄́͋̒ͦ͛͑̌̊́̍̿ͧ̄͞w͚̲͖͔̲̼̮ͭ́̂̍ͧ̾͟͠e̵̢̡̻̼̘̩̯̪̪͔̱̻͎͇̿̎̍͌ͣ́͋̏̄̏̎̑͘͝r̛̗̦̺̩̟̬̝̳̗͛ͧͭ͛̓͊̌̌͜.
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ PROBABILITY (SPARSE CORRUPTION) ━━━</span></span>
+
+  <span class="dim"># 100% probability (default) — every character affected</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;All characters corrupted&quot; --prob 1.0 --intensity 10 --seed 42</span>
+  Ǎ̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞l̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝l̨̹̲̟̟̏͋̔̔̋̎͢ͅ c̷̶̡̰̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕h̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞a̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡r̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝a̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢c̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡t̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡e̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜r̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢s̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝ c̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟o͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝r̨̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟r̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝ū̸̶̢̻̭̹̖͇͇́͋̒ͦ͛͑̌̊́̍̿ͧ̄͞p͚̲͖͔̲̼̮ͭ́̂̍ͧ̾͟͠t̵̢̡̻̼̘̩̯̪̪͔̱̻͎͇̿̎̍͌ͣ́͋̏̄̏̎̑͘͝e̛̗̦̺̩̟̬̝̳̗͛ͧͭ͛̓͊̌̌͜ḍ̙̖̯͚͌̇̾̂̔̋̑͛̔͠͠
+
+
+  <span class="dim"># 50% probability — half the characters affected</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Half the characters corrupted&quot; --prob 0.5 --intensity 10 --seed 42</span>
+  Ha̶̡̛̹̯̱͉̖͉̻̦̞͙̦͑ͪ̄́̌̀́ḻ̢̢̨̼̘̤̙̜̤̳ͥ͂ͮ̔̓͘͠͞͡f̢̡̻͎͈̗̥̣͖͓̥̹̩͕͌͊̉̈̔ͯ͘͞͝ t̴̨̜̳͈̪̘͚̯͙͎̖̎͆ͪ̌ͯ́̅̕he ch̵͇̯͈̯̖̦̖͕͓̽ͭͩ̎̀̉ͫͨ̐͌͊ar̷̡̡͓̪̯̠̥͚̹̫̮̝̦̄̿̃͛ͣ̇͜͝ͅač̵͖̱̬͈͉̠̜̪̪̬ͪͨ̃̍͐̋ͅter̴̡̨̛͚͍͙͕͎̟̭̩̘͚̣͈̍̊̽̏̍ͫ̽ͨ͝s̢̢̞͙̙̠̲̺̝͔̲̳̪̱̯̓͗̈̐ͮ̈́͂͛̃͞͝͡ cǫ͓̞͍̻̲͚̹̖͐̐̑͛̃̾ͯͯ̄̋̎ͬ͡rr̵̷̖͇̹̣̰̆̅̓̎͊͗̋͋̎̿ͪͧ͜ͅu̵̡̢̥͔͉͎͔̜͈͓̩̳̞͕ͪ̓ͦ͆̈pted
+
+
+  <span class="dim"># 25% probability — sparse corruption</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Sparse scattered corruption through text&quot; --prob 0.25 --intensity 10 --seed 42</span>
+  Sp̶̡̛̹̯̱͉̖͉̻̦̞͙̦͑ͪ̄́̌̀́a̢̢̨̱̼̘̤̙̜̤̳ͥ͂ͮ̔̓͘͠͞͡rs̢̡̗̥̣͖͓̥̹̩͕͊̉̈̔ͯ͌̓͘͟͡͠e sc̴̸̛͚̯͙͎̖̼̺̯̣̹̜ͪ̌ͯ́̅̂̆͋ͤ̕attered̴̙̭̙͇͇̝̬̰͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐͢͡ corȓ̶̴̢̢̳͔͎̙̺ͯ͌̽́̆̌̒͆̌ư̢̺͚̜̩̦͎̠̫̪̤̾ͤͥ̊̅͜͜͟p̷̬̪͙͚̰̼̞̥͙̱̯̘̱̓̂ͯͦͮͫͧ̉̿̋̃̔ͯ̚͠ͅtiơ̸̺̥̥͇̙̬͚͆͑̌̆ͩ̍͆͋͆́ͬ̋͗̍n t̖͉̥̺͖̝̝̜̰̣̲̼̠̳ͩͩ̔̈ͦ͒͊͢͞hroug̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝h text͓̗̦͕͉͓͉̣͈̜͓͎ͩ͋̈ͬͨͮ̚͠ͅ
+
+
+  <span class="dim"># 10% probability — occasional glitches</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Mostly clean with occasional glitches here and there&quot; --prob 0.1 --intensity 15 --seed 42</span>
+  Mǫ̛̖͉̻̦̞͙̦̜̜͎̲͉̯͙̰͍̳͑ͪ̄́̌̀́̊͌͂̌͞͠ͅstly̶̨̢̟͚̹̰̻͎͈̌̅̏͋̔̔̋̎ͬ͌͊͟ c̸̡̨͚̮̜̘̜̳͈̪̘ͬͩ̑͐ͫ̾̎̍̓̎͆̕͡lean w̴̷̛̖͕͓͍̥̘͓͖̙̭̙͇͇̝̬̰̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂͠͝ith occasional glitch̢̢̛̛̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟ͨ̃̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͘͟͢es he̴̢̢̛̞͙̙̠̲̺̝͔̲ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛͞͝͡re and there
+
+
+  <span class="dim"># 35% probability — the classic Python recipe</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;He comes&quot; --pool classic --prob 0.35 --intensity 10 --seed 42</span>
+  He̸̴̷̴̡̧̧̮̘̱̖̹̝͋ͣ̉̃̂̿̿͆ c̷̶̷̶̡̡̨̛͙̻̪̳̹̘̤̤͑ͬ̽̚om̶̷̷̷̡̪͇̗̦̣̠̦̪̓̒͐̒ͭ̽͆͂̈́es̸̴̴̵̬̘̫̙̩͈̰͇̀ͣͮ̊̾
+
+
+  <span class="dim"># Sparse + high intensity — rare but intense</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;When it hits it hits hard&quot; --prob 0.2 --intensity 40 --seed 42</span>
+  Wh̴̢̢̨̨̡̨̢̡̢̡̛̤̙̜̤̳̣͖̹̲̟̟͚̹̰̻͎͈̗̥̣͖͓̥̹̩͕̬̣̰̣̱͔̩͚̮̜̘̜͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓͘͟͠͞͡͝ͅen it̵̴̵̷̡̡̢̡̢̢̡̛̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̝͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦ͮͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩ͢͜͜͜͠͠͝͡ͅͅ hit̴̶̶̵̢̢̡̨̛̲̳̪̱̯͖̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̍ͫ̽ͨ̓̂ͯͦͮͫͧ̉̿̋̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀ͧ̈ͭ̚͟͞͡s i̷̷̡̢̨̨̛̛͈̜͓͎͉̬̥͈̗̠̦͓͙̤̹̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕̯̼̺̙̺̦̥ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓̀̄ͩͪ̓ͦ͆̈̇̐ͪͤͨͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ́͘̚͘͢͠͡͠ͅͅt hits har̴̵̶̴̶̢̢̡̨̧̛͉̺͚̲͖͔̲̼̮͍̰͔̬̣̹͇̮̳̤̙̤̣̦̯̞̻̼̘̩̯̪̪͔̱̻͎͇̖͇͎͖ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͋̒ͦ͛͑̌̊́̍̿ͧ̄͋̊͒̀̍͐̚͜͢͜͠͠͝͡ͅd
+
+
+  <span class="dim"># Sparse + pattern — fade-in with 30% probability</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Building dread through scattered marks&quot; --prob 0.3 --pattern fade-in --intensity 20 --seed 42</span>
+  Bu̺il̗̀d̖͉͆ͥing̨̰̅ͧ͊ͥ͂͘͢ dread ṭ̶͖̹̲̟̌̅̏͋̔̔hr̶̢̥̹̩͕̬̣̰̣̱̓͑ͧͣ̌́̑̎͢͡ouĝ̵̛̫̫͖͓̣̮̆͋ͤ̃̔ͯ͂ͮͨ̀͗͑͂̎͞h̵̙͇͇̝̬̰̣͓̪͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩ͢͜ s̶̢̡̙̺̝͖̱̬͈̑ͯ͌̽́̆̌̒͆̌̌̃͋͡͡ca̶̶̢̪̤͕̫͎̰̘͚͍͙͕̾͑ͯ̅̒ͨ͘̚͜tt̢̛̘̱̮͎̞͙̙̠̲̺̝̃̔ͯ̎ͤ̾ͭͯ̓͗̈̐ͮ͝͝ͅer̷̨̞͍̻̲͚̹̖͉̥̺͖̝̝͆́ͬ̋͗̍͐̐̑͛̃̾ͯͯ̄̋̕͢͡͡e̴̴̡̢̛̛͔̰͍̱̞̝̥͔͉͎͔̜͈͓̩̳͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓͘͡d̷̸̨̨̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕̯̼̺̙ͥͩ́̒ͬͥͨͥ̎ͤ̅ͨͨ̌ͥ̾̐ͤ̌́̊̒ͨ͘͢͢͞ͅͅ marks
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ MAX MARKS CAP ━━━</span></span>
+
+  <span class="dim"># High intensity, capped to 3 marks per char</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Controlled chaos&quot; --intensity 50 --max-marks 3 --seed 42</span>
+  Č̺͘ó̮̌ṉ̡͂ț͒r̜̅o̯͘l͎ͦ͋ľ̙̏ę͋d̹ͬ c̨̈h͈͑ͧa̡͖̎o̬ͫ̕s̱͔̎
+
+
+  <span class="dim"># High intensity, capped to 5 marks per char</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Controlled chaos&quot; --intensity 50 --max-marks 5 --seed 42</span>
+  Č͔̙͑͘ò̹̯́̊ǹ̻̦̞ͥt͉̅ͧ͊r͍̳͎̔̓ǒ̶̜̏̄l̷͖̹̔̋l͚̹̈̔e̗̥̣ͣ̌d̩͕̬̑͞ c̡͔̩̎͆ĥ͈̆͋a͙͎ͯ͂o̷̹̜̫͂s̟͕͓̎͝
+
+
+  <span class="dim"># High intensity, capped to 10 marks per char</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Controlled chaos&quot; --intensity 50 --max-marks 10 --seed 42</span>
+  Č̡̛̗̮̗͑ͪ̄͘ǒ̻̦̞͙̦͆ͥ̀͠n̨̯͙̰͍̳͎͊ͥ͟ť̨̨̡̏̄̌̅̏͞r̵̨͚̹̰̻͊̉͘ó̷̹̩͕̑̎̋ͬͩl̶͚̮̜̘̓̎͆ͪ̕l̛̯͙͎̖̼̺̃̔͢ẹ̛̮̟͕͓̆̽ͭ͡d̖̦̖͕͓̈͛͂ͣ͝ c̝̬̰ͩͭ̄̿̃͛͠h̷͚̹̫̮̝̋͂̋͘ǎ̢̢͔͎̙̺̌̃͞ö̠̜̪̪̬́̾ͤ͠ͅs̢̤͕̒ͨ̍̊̽̚͜
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ REPRODUCIBILITY ━━━</span></span>
+
+  <span class="dim"># Seed 42 — run 1</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Deterministic output&quot; --intensity 10 --seed 42</span>
+  Ď̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞e̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝t̨̹̲̟̟̏͋̔̔̋̎͢ͅḛ̷̶̡̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕r̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞m̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡i̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝n̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢i̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡s̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡t̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜i̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢c̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝ o̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟u͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝t̨̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟p̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝ū̸̶̢̻̭̹̖͇͇́͋̒ͦ͛͑̌̊́̍̿ͧ̄͞t͚̲͖͔̲̼̮ͭ́̂̍ͧ̾͟͠
+
+
+  <span class="dim"># Seed 42 — run 2 (identical)</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Deterministic output&quot; --intensity 10 --seed 42</span>
+  Ď̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞e̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝t̨̹̲̟̟̏͋̔̔̋̎͢ͅḛ̷̶̡̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕r̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞m̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡i̵̡̢̡̢̛̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝n̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢i̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡s̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡t̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜i̵̵̜̰̣̲̼̠̳̣̭͔͎̜͊ͯ͌̀ͥ̐͐͢c̛͍̱̞̝̥ͣ͌̎̓̀̄ͩ͘͡͝ o̴̷̡͕͉͓͉̣͈̜͓͎͉̬̥͈ͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ̚͟u͖̝͙̟͙̣̜̒ͨͮ̏͌ͮ̕͝t̨̺̙̺̦̥͎̼͊́̈́̎͒̀ͫ͂̕͟͟p̷̡̛̖̤̪̱̹̬̫̬̐̇ͬ͑ͪ͊̚͝ū̸̶̢̻̭̹̖͇͇́͋̒ͦ͛͑̌̊́̍̿ͧ̄͞t͚̲͖͔̲̼̮ͭ́̂̍ͧ̾͟͠
+
+
+  <span class="dim"># Seed 99 — different seed, different result</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Deterministic output&quot; --intensity 10 --seed 99</span>
+  D̡̨̛͔̩̻̞̺̍͛̍͑͂ͬ̿̕͞e̸̶͕̟͈̲͚͖̺̗̗̬͍̙̪̙͂ͣ̾̎̀̋ͯ͂̾ͪ͊ͮ̚t̸̻͕̝͓̲̲̩́̋ͤ̃̋̎ͣ̚ͅẻ̝͍̠̙̤̱̘̈̋̓ͣͤ͡r̸̡̢̥̹̹̥͓̼͉̺̥͇̙̔̅ͩͫ͗̕̚͜m̷̨̧̺̲͚̺̫͔̀ͪͩͤ͂ͬ̎ͩ̚͞͞i̴̡̥̺̟͈̫̬̯̳̳͇͇̊͐̉͌͐ͨ̌ͨ̓̆͘̕͝ͅͅͅn̤͇͚͈̩̟̐̈́ͭ̔̓ͭ̚͞i̸͍͖̭͔͔̬̽ͧ͒ͭ̉̍̏̈́ͩ̚s̳̱̪̟̱̘̗̾̀̒̀̒̈́͘͝ẗ̸̰̠̰̻̹͉̙̺̼͍̞̙͇̽͒ͥ̆̉̏̚į̢͙̖̻̜͈̫͈͓̙͉͓͗͊͛͊̒̂̒͋̊̉̆͜ͅc̷̸̛̦͍̗͉̲̰̻̖͎̑̂̐̈ͬͩͥ̐̆̃̓̕͞ o̗̠͔̟̥͚̣̱̪̖ͪ̌́ͯ̋͌̉̈́͜͝u̢̢̠͉̝͍̣̹̺̮͓̯̯ͮ̄͆̒̇ͫ̅̀̌̈́̋͜͡ͅţ̷̣̱̤̼̝̞̥̣̫̃̍ͣ̒̊ͤ́̂̃̊̂̐͢p̴̨̝̫̻͙̪͓͊ͦ̔̓̑̔͂ͣ́̉̌͋͛̃ų̴̴̤͇͔̻̪͕͗ͥ̏̍ͬ̌̑̅ͩ͋̍̽̽͟ͅt̵̡̖̰̳͎̠͓̹̱̖͉͂ͨ̅̏ͣ̃ͫ̽͜͢
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ DECODE ━━━</span></span>
+
+  <span class="dim"># Full decode — strip all combining marks</span>
+  <span class="fg-cyan">$ echo &#x27;Round trip:&#x27; &amp;&amp; ./zalgoctl encode &#x27;Hello World&#x27; --intensity 20 --seed 42 | ./zalgoctl decode</span>
+  Round trip:
+Hello World
+
+
+  <span class="dim"># Partial decode — only strip chars with &gt;10 marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Threshold test&quot; --intensity 20 --seed 42 | ./zalgoctl decode --threshold 10</span>
+  Threshold test
+
+
+  <span class="dim"># Partial decode — only strip chars with &gt;5 marks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Threshold test&quot; --intensity 20 --seed 42 | ./zalgoctl decode --threshold 5</span>
+  Threshold test
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ ANALYZE ━━━</span></span>
+
+  <span class="dim"># Analyze whisper-level text</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Analyze me&quot; --style whisper --seed 42 | ./zalgoctl analyze</span>
+  {
+  &quot;total_chars&quot;: 28,
+  &quot;base_chars&quot;: 10,
+  &quot;combining_marks&quot;: 18,
+  &quot;marks_above&quot;: 9,
+  &quot;marks_below&quot;: 9,
+  &quot;marks_middle&quot;: 0,
+  &quot;max_marks_per_char&quot;: 2,
+  &quot;avg_marks_per_char&quot;: 1.8,
+  &quot;density&quot;: 0.64,
+  &quot;is_zalgo&quot;: true,
+  &quot;verdict&quot;: &quot;whisper&quot;
+}
+
+
+  <span class="dim"># Analyze heavy-level text</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Analyze me&quot; --style heavy --seed 42 | ./zalgoctl analyze</span>
+  {
+  &quot;total_chars&quot;: 242,
+  &quot;base_chars&quot;: 10,
+  &quot;combining_marks&quot;: 232,
+  &quot;marks_above&quot;: 107,
+  &quot;marks_below&quot;: 101,
+  &quot;marks_middle&quot;: 24,
+  &quot;max_marks_per_char&quot;: 36,
+  &quot;avg_marks_per_char&quot;: 23.2,
+  &quot;density&quot;: 0.96,
+  &quot;is_zalgo&quot;: true,
+  &quot;verdict&quot;: &quot;extreme&quot;
+}
+
+
+  <span class="dim"># Analyze extreme-level text</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Analyze me&quot; --style extreme --seed 42 | ./zalgoctl analyze</span>
+  {
+  &quot;total_chars&quot;: 672,
+  &quot;base_chars&quot;: 10,
+  &quot;combining_marks&quot;: 662,
+  &quot;marks_above&quot;: 296,
+  &quot;marks_below&quot;: 323,
+  &quot;marks_middle&quot;: 43,
+  &quot;max_marks_per_char&quot;: 95,
+  &quot;avg_marks_per_char&quot;: 66.2,
+  &quot;density&quot;: 0.99,
+  &quot;is_zalgo&quot;: true,
+  &quot;verdict&quot;: &quot;demonic&quot;
+}
+
+
+  <span class="dim"># Analyze clean text (no Zalgo)</span>
+  <span class="fg-cyan">$ echo &#x27;Plain text&#x27; | ./zalgoctl analyze</span>
+  {
+  &quot;total_chars&quot;: 10,
+  &quot;base_chars&quot;: 10,
+  &quot;combining_marks&quot;: 0,
+  &quot;marks_above&quot;: 0,
+  &quot;marks_below&quot;: 0,
+  &quot;marks_middle&quot;: 0,
+  &quot;max_marks_per_char&quot;: 0,
+  &quot;avg_marks_per_char&quot;: 0.0,
+  &quot;density&quot;: 0.0,
+  &quot;is_zalgo&quot;: false,
+  &quot;verdict&quot;: &quot;clean&quot;
+}
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ CREATIVE COMBINATIONS ━━━</span></span>
+
+  <span class="dim"># Heartbeat + heavy — eldritch pulse</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The heart of darkness beats&quot; --style heavy --pattern heartbeat --seed 42</span>
+  The he̡͂a̸̵̜͎ͥ͒̒̈ͭr̷̴̶̨̨̡̜̤̳̣͖̹̲̟̟͂ͮ̔̓ͦ͋ͨ̈́͒̂̌ͅt̷̸̢̡̬̣̰̣̱͔̩͚̮̜̘̜̓͑ͧͣ̌́̑̎̋ͬ͡͞͡ õ͙͎̖̔ͯ͝f̹̎ d̷̮̟͕ͭͩa̷̴͓͖̙̭̙͇͇̝̬͊̈͛͂ͣ͂̀̑́ͬͩͦr̡̢̡̛̫̮̝̦̱̙̳̋͂̋̑ͯ͘͞k̶̡̺̝̃ness beats
+
+
+  <span class="dim"># Wave + demonic — rolling madness</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Waves of insanity&quot; --style demonic --pattern wave --seed 42</span>
+  W̢̢̨̨̡̨̛̘̤̙̜̤̳̣͖̹̲̟̟̌͑ͪ̄́̌̀́̊͌͂̌͆ͥ̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ̈́͘͘͟ͅa̴̵̷̡̡̢̡̢̢̡̢̛̛͓̪̯̠̥͚̹̫̮̝̦̱̙̳͔͎̙̺̝͖̱̬͈͉̠̜̪̪̬̺͚̜̩̦͎͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂ͮͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛͂ͣ͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̕̕͜͠͠͝ͅͅv̵̷̢̢̢̡̨̛̯̘̱̮͎̞͙̙̠̲̺̝͔̲̳̪̱̯͖̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓̞͍̻̏̍ͫ̽ͨ̓̂ͯͦͮͫͧ̉̿̋̃̔ͯ̎ͤ̾ͭͯ̚͟͢͝͝ͅę̶̷̶̴̶̷̷̨̡̡̢̛̛̩͚̯͖̝͙̟͙̣̜̫̥̲̮̱̣̼̖͕̯̼̺̙̺̦̥͎̼̥̥̩̩̥̝̪͖̺͔̳̥̰̖̤̪̱̹̬̫̬͔͉̟̙̮̳̦͍͇̺̠̗̬͎̙̀ͥ̐͐ͬ̇̆̅̓̎͊͗̋͋̎̿ͪͧ̅̏̀ͣ͌̎̓̀̄ͩͪ̓ͦ͆̈̇̐ͪͤͨͪ̋̍̅ͣͩ͋̈ͬͨͮͥͩ́̒ͬͥͨͥ̎ͤ̅ͨͨ͘̚͘͜͢͠͠͡͞ͅͅs̸̴̸̡̡̨̡̨̛̛͖̪̰̲̫̗̦̺̩̟̬̝̳̗̩̰̗̹̝̬̘̦͇͇͍͒̀̍͐̀͛ͣ̅̉ͭ́̂̍ͧ̾ͥ͐ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͂̇̌͒͒̃͂̋͘̚̚͟͡͞͡͠͠͡ͅ o̵̧̨̧͎̲̝͚͈̪̮͎͍͂ͯ̓͌ͣ͌͛ͭ̊́̈̆͐̈́̋͒ͣ̉͊͛̆ͦͮ̅́̑͑ͭ͗̄͑͋̕͠f̸̴̶̶̸̡̡̢̛̛̤̖͖̙̼̭͇̻̹̭͈̜̻̥̱̬̯̪̦̻̣̣̝̠̝̯͇̠̭̼͙̯̤̜̠̟̖̯̤͙̰̻̝͓̭͓̱̬̫̠̘͖ͦ͒ͮ̎ͥ͂̿̎ͧͦ̄ͩ̍͘͘͜͟͞͡͠͡ͅ ī̵̶̴̴̢̫̲̤̼̻̫̻͕͈̳̺͖̪̯̹͔͍̙̟̥͋̂̈̓̐ͯ̆ͣ͊ͤ̌́̽̽ͨͯ̐͋͊ͭ̋̋͘͞ņ̛̹͕̟̱̳̭̜̦̆͑͒ͬ̀̀̄̂̑̍̅ͭͦ̈́ͭͯ͐̎̂͜͠s̩̮͚̹͒̏ͬͥ̓̾̑̑͢a͇̓ni̢̞̰͒̆ͮ͞t̨̰͕̮͓͓̤͈̪͖̮͍̤̥̱͚̭ͫ̾̆ͦ̀͗̀̏ͦͮ̍y̴̨̼͉̺͍͚̭̗̮̱͓͓̫̯̓͂̾̑̊͒̈́̌͟͠
+
+
+  <span class="dim"># Crescendo + extreme + extended blocks</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The horror builds&quot; --style extreme --pattern crescendo --blocks all --seed 42</span>
+  Thẽ h̛᫃o̱̣ᷗ̀ᷗ᫇r᷎᪷͖̋ᷜ᷀ᷗ⃗᷵ᷩŗ̳̳̬⃨᷋̅̿͊̉̀̋ᷰ᫂o̧᷎᪹̘̯̬̒ͥ⃜᷄᷉ᷛᷔ͡r̶᪺̼̜̹⃯͔᷆ͦᷤͮ̓́̓᪼ᷢͧ̾⃡᪴̊᫂ᫎ͜ b̴⃦᪷᪷᪶̯̜᷉̓᷄̌ͫͭ⃑ᷟ̓᪳̔ᷣᷞ͋᷄᷀̑᷒ᷔ̀ᷲ⃩ᷩᷬ᷍ų̡᷎̛᪸᪷᪵᪽̝̩⃨͙͉̦̟̼͉̈᷒᷒̎᪰̓ᷟͪ̽͐⃡᷅ͫ̎̿͗̿̾̈᷃̿⃧ᷫ᫅ᫍᷧ᫉ͅi᪸ͧ͗ᷝ́ͭͩ͆́ᷥͬᷝ̅⃡ᷚ⃗ᷥᷜ̓᪱̽ͧ̆ͤ⃰ᷰ̚⃠⃫⃯͖̣̮⃭͚͕᷸᷷᫈᫋lᷜ̒⃖̉̕᪾⃦⃒⃥̧̧᷿̼͚͔⃨̩̺̮̯̝͈⃯⃯̝̫̳᷈̀̍᫈᫅᫋ᷭᷬ͢d᪹᷀⃜᷅̀ᷘ͋᷆ᷦ̏̍̌̈́᷀⃝⃓⃥̡̧᷺̞̼̬̖̫᫊͖̖̝͕͚̣̯̪̟̻̣ᷰ⃧ᷪᫌ᫂ᷭᷮᷩᷮᫎᷫᷮᫍᷭ᫁͠ͅs̴᷎᷏᪷ᷠ̂͒ᷥᷗᷞᷘ̓ᷕ̌ᷟᷝ̾ᷘͮ͌ᷖ̿̂͒ᷞ⃗͆᷄ͧ⃛ᷦ̍⃗̔⃖̓̌ͫ͐᷀᪴ͥ᪻͂᷌⃩̚᷼⃝⃞⃘̷̡̨̨᫄̰̯̮̯̻̻̮̼⃨̮͖̖̭͚᫄͈͇͉̤̞͓̱̦̗̪͉ᷴᷪ᫈᫅ᷮ᫁ᷮᫎ᫂ᷨ᫋᫅ᷪͅ
+
+
+  <span class="dim"># Spike + void — center of the storm</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The eye sees all&quot; --style void --pattern spike --seed 42</span>
+  Th̴̶̡̛̹̯̱͉̖͉̻̦̞͙̦̜̜͎̲͉ͪ̄́̌̀ͅẹ̶̴̷̡̢̡͖͓̥̹̩͕̬̣̰̣̱͔̩͚̮̜̓ͦ͋ͨ̈́͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊̉̈̔ͯ͌̓͑͘͡͠ e̡̡̢̡̢̛͙͎̖̼̺̯̣̹̜̫̫͖͓̣̮̟͕͓̥̹̲̞͇̯͈̯̖̦̖͕͓͍̥̘͓͖̙̭̙͇͇̝̬̰̣͓̪̯̠̥͚̹̫̮̝̦̱̙̳͔͎ͤ̃̔ͯ͝ͅy̢̢̡̨̢̢̢̡̨̺͚̜̩̦͎̠̫̪̤͕̫͎̰̘͚͍͙͕͎̟̭̩̘͚̣͈̬̪͙͚̰̼̞̥͙̱̯̘̱̮͎̞͙̙̠̲̺̝͔̲̳̪̱̯͖̠̼̩̺̥̥͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̹̋̇ͬ̈́̾ͤͥ̊̅͜͜͜ͅͅe̵̵̵̷̶̷̡̢͎̜̪̤̖͇̹̣̰̪̖̙͓͔̰͍̱̞̝̥͔͉͎͔̜͈͓̩̳̞͕͓͙͉͓̗̦͕͉͓͉̣͈̜͐͢͟͜͝͞͞͡ͅͅ ş̴̸̴̵̴̸̶̷̸̡̛̛̛̛̛̛̛̣̙̖̯͚̹͈̹͇͖̠̖̞̝̺̰̻͇̟̲̝͍͙̜̗̥̺͙̩̼̙̻̳̜͇͎̲̝͚ͥ̾̐ͤ̌́̊̒ͨͮ̏͌ͮ͂ͬ̆ͮ̉ͭ̎̅̑͊́̈́̎͒̀ͫ͂͗͐̔̃͐̒̑ͧ͗̐̑̐̇ͬ͑ͪ͊̐̓̀̏̈́͐̾̽̋̿ͪͤ̉̄́͋̒ͦ͛͑̌̊́̍̿ͧ̄͋̊͒̀̍͐̀͛ͣ̅̉ͭ́̂̍ͧ̾ͥ͐ͯ͆ͭͪ͊͗̀ͦ̓ͪ̿̎̍͌ͣ́͋̏̄̏̎̑͂̇̌͒͒̃͂̋ͪ͆͒ͨͣ̔̀̓͛ͧͭ͛̓͊̌̌́̒͑̉̾̇̕͘̕͘̚̚̚͘̚̚̚͜͞͝͞͠͠͠ͅȩ̷̶̧̛̛̛̻͕͈̳̺͖̪̯̹͔͍̙̟̥̱̤̝̻̻͖̮̭̙̗̫̦̣̜͙͍̱͖͚̺̣̗͇̬̹͕̟̱̳̭̜̦̺͎̦̻̤͖͉̰̬̥̦͙̩̮͚̹̯̪̠͇̔̀̒ͧͦ̅ͭ͋ͦ͒ͮ̎ͥ͂̿̎ͧͦ̄ͩ̍̾͊̔́ͧ̊̋ͤ̒ͩ͒̏̀ͭ̄͗̿͛͑͌̿ͤ̅̌͒̐̈́̿͂͛̒͒̎̍̆̊̆͂͛̊̋̿͗ͮ́̏̅̊̌̉̀͂̏ͮ̓͒̆ͨ̿ͨ̈́̾̽̊̂ͬ̿ͦ̄͋̂̈̓̐ͯ̆ͣ͊ͤ̌́̽̽ͨͯ̐͋͊ͭ̋̋͐̈̉̄̀̽͘͘̚͘͟͟͜͞ͅę̷̴̴̢̫̜̳͓̫̻͔̘͉̤̞̯̰͈̟̙͓̳͕̞̬̣̣̖͉̓ͬ̽͒̆ͮ͊̍̈̓̓̅ͯͫ̾̆ͦ̀͗̀̏ͦͮ̍̓ͫ̀ͩͨ̏ͤͬ̀ͦ̏̐͆ͯ̿̈͂̒̓͂̾̑̊͒̈́̌ͣ̂͒ͥ͐ͦͮ̀̂̀͆ͨͩ̽́̾͗͐̈̾ͮ̒͒͌ͧͧͨ̔̕̚͘̕̚͟͢͢͟͠͡͞s̵̨̧̛̪̜̭̩͖̗̫͖͎̜̻̯͚̩̠̽̓͆͌̍ͧ̊̿̍̈́̈́ͯ̐ͮ͐̏̈́͑̂͊̀ͪ̏ͤ͊̓͌͋͑͗͐ͧ͋ͪ͌̐̽̈́̄̐͛̉̇͂ͮ͂ͫͦ̎ͦ̿ͥ͛̒̆ͭ̇ͮͨ͗ͮͮͥ̔ͤ̀͂̾͑͐͆ͦͬ̅̌́ͩ̓ͫ̌̃ͦͫ̐̇ͭ̐̀̅ͩ̇̕͘͘̚͜͟͟͢͜͟ a̴̶̶̢͓̦̞͔̖͎̞̝̣̟̺̗̖͈̦̟̘̯̬͈̮͐͌͆́ͤ̍̆͝͠ͅͅl̬͙̘̭̩̻̭͕̙̙̲̘̤̳̰̦͚̯̫̲̜̻͎̹͇̂ͤͨ͝l
+
+
+  <span class="dim"># Fade-in + letters only — ancient text appearing</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The ancient words appear&quot; --pattern fade-in --marks letters --up 8 --mid 0 --down 0 --seed 42</span>
+  Theͥ aͫͮnͨcͥiͣͥeͪͥͪnͣͭͬͧtͯͧ wͤͮoͭͬͩͯͧrͭͫͮͪͬdͥͦͤsͤͦͫͧ aͥͦͯͫͪpͬͥͧͯpͪͫͭͭͥͣͧͦeͯͮͧͫͨaͨͦͦͪͦͪͮͨͥͯͩrͣͤͫͭͨ
+
+
+  <span class="dim"># Sawtooth + dots — dotted rhythm</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;dot dot dot dot dot dot&quot; --pattern sawtooth --marks dots --intensity 12 --wave-freq 3 --seed 42</span>
+  dọ̤͘ṫ̥̥̣̇ ḍ̦̥̊̈̇̈̇͘͘ö̤̣̣̣̤̥̤̤̉̊̉̊̇̈͘͘͘t̥̥̥̦̦̣̣̤̤̣̦̦̤̊̊̇̊̇̈͘ d̤̉ỏ̤̣͘ṭ̤̇̇̊̊̉ ḋ̦̦̤̥̣̦̦̤̥̥̊̊̉̈̊̇̉̉͘o̦̦̦̤̣̦̦̣̤̊̉̇̈̇ṭ̥̥̣̤̦̥̤̥̣̣̤̥̇̉̉̈̉͘ ḍ̊ö̦̊̈̇ṫ̤̤̥̥̦̇̉͘ d̤̤̣̦̤̦̈̇̉͘ȯ̤̦̤̦̤̤̦̦̥̥̣̤̦̉̈̉̇͘͘͘͘ṭ̦̣̥̥̤̥̥̦̣̥̣̤̇̉̉̇̇̇̉̊̈͘͘
+
+
+  <span class="dim"># Decrescendo + lines — fading strikethrough</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Vanishing text&quot; --pattern decrescendo --marks lines --intensity 20 --seed 42</span>
+  V̴̴̢̡̢̢̡̡̳̲̳̲̳̳̲̳̲̠̍̏̏̐̅̎̅̍̎̅̅̏̎̍̎̐̅̐̏̍̅̐̍a̷̴̡̢̡̡̳̲̲̳̲̠̍̏̍̍̍̍̐̏̏̅n̸̵̡̢̢̡̢̢̡̳̠̠̠̲̲̠̳̳̳̠̲̲̲̐̍̏̍̐̎̍̍̎̍̎i̵̷̢̢̡̲̠̲̲̠̠̳̳̐̐̍̎̅̐̐s̵̶̡̡̲̳̲̐̐̅̎̅̏̏̅̎̎̍̐̎h̵̸̡̡̳̠̲̍̍̎̍̍̅̏i̴̶̢̢̲̲̳̠̎̏̐̅n̵̡̢̢̳̳̠̍̅̎̎g̵̢̡̠̳̐̐̅̎ t̳̎e̡̅xt
+
+
+  <span class="dim"># Pulse + up-only — intermittent ascension</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Up and down and up and down&quot; --style up-only --pattern pulse --seed 42</span>
+  Ứ̏̌͑ͪ̄́̌̀́̊͌͂̌͆͘p̀ͥ͒̒̈ͭ̒̅̅ͧ͊ͥ͂ͮ̔̓ͦ͋ͨ͘ a͒̂̌̏̄̌̅̏͋̔̔̋̎ͬ͌͊n̈̔ͯ͌̓͑ͧͣ̌͘d̑̎̋ͬͩ̑͐̕ d̛̾̎̍̓̎͆ͪ̌ͯ́̅̂̆͋ͤ̃̔ͯ͂̕ơͨ̀͗͑͂̎͌̆̽ͭͩ̎̀̉ͫͨ̐͌͊̈͛wͣ͂̀̑́ͬͩͦ̐̃ͩͭ̄̿̃͛ṅ̛̿̓̎ͨ̋͂̋̑ͯ͌̽́̆̌̒͆͘ ǎ̃͋̌ͪͨ̃̍͐̋̇n̛̛̛̈́̾ͤͥ̊̅̾͑ͯ̅̒ͨ̍̊̽̏̍͘̚d̽ͨ ûͯpͮͫ ả̿n̚d̔ d̎ͤơwͯ̓n̈̐
+
+
+  <span class="dim"># Wave + max-marks 4 — controlled waves</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Smooth controlled waves&quot; --pattern wave --intensity 30 --max-marks 4 --seed 42</span>
+  Š̺͔͘m̗̠̌͝o̖͆ͥö̦ͭt͉̯͊ͅh͎̱ͦ͋ c̢̏̄ǫ̡̔n̶̟͊ͅt͎͈̓͑r͖͓̎̋ọ̢ͫ̾l̡͚ͪ̕l͈̆͋e͙͎ͯ͂d̯ wa̮̟ͩ̎v̞͌͊e̦̖͂̀s͓͖̐̃
+
+
+  <span class="dim"># Crescendo + no-skip-spaces — total corruption</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Nothing is safe&quot; --pattern crescendo --intensity 20 --no-skip-spaces --seed 42</span>
+  Not́h̊i̖͆ͥn̵̜͎̈ͭ̒g̳͎̱̼̘͂ͮ̔̓͠ ̸̨̡̣̌̅̏͋ỉ̢̡̗̥̣͖͓̈̔ͯ͌̓͑ͧ͘͠s̸̡͚̮̜̘̜̳ͫ̾̎̍̓̎͆͡ ̛͓̣̮̟͕͓̔ͯ͂ͮͨ̀͗͑͂̎͌̆͜͢s̷̴̡͓͖̙̭̙͇͇̝̬̰̣͓̪̈͛͂ͣ͂̀̑́ͬͩ͠ȃ̴̶̡̝͖̱̬͈͉̠̜̪ͯ͌̽́̆̌̒͆̌̌̃͋̌ͪ͟͡f̴̡̨̛͙͕͎̟̭̩̘͚̣͈̬̪͙͚̰̼̞̥͙͑ͯ̅̒ͨ̍̊̽̏̍ͫ̽ͨ̓̚͢͡ẽ̶̸̷̡̨̛̥͇̙̬͚͚̙̣͖͓͓̞͍̻̲͚̹̖͉̥̺͖̝͆̀ͧ̈ͭ̄̊͆͑̌̆ͩ̍͆͋͆́ͬ̋͗͟
+
+
+  <span class="dim"># Classic pool + heartbeat — old school pulse</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The ancient heart still beats&quot; --pool classic --pattern heartbeat --intensity 15 --seed 42</span>
+  The aṉç̶̧͙̝̀͆̚i̶̷̵̡̡̛͙̻̪̳̹̘̤͑ͬ́̚e̶̶̶̷̡̩̗̝͇̪̗̦̣̠̦̪ͧ̓̒͐̒ͭ̀̽͆͂n̸̷̷̴̸̶̛̛̝̬̘̮̪̺̺̱̣̬̭̾̀ͣͮ̊̅̌͗̇ͮ͆͂ͅṯ̷̶̡̖̦̖ͥ͆̓̐̽͠ h̢̘e̵̙a̴̶̝̮̗̻̠̥̽͠r̴̴̹̘̥̙̘̙̳̮̟̫̫̍́̇͆ͤ̇͊̾̿̚̚͟ͅt̵̴̛̬̥̱̮̬̲̘͈͇̞ͭ̊́̀́̕͟ͅͅ s̩̆till beats
+
+
+  <span class="dim"># Geometric pool + wave + sparse — glitch transmission</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Signal degradation detected in transmission&quot; --pool geometric --pattern wave --prob 0.4 --intensity 12 --seed 42</span>
+  Si̵̞̖̘̟̞̘̟̩͌͑̅͊̅g̸̶̞̩̟̪̞̠̍͒̏̅̅͑͌͑͐͋n̵̙̫̟̟̘̎̍̎͌̏̏al̸̸̙̟̜̪̝̙̘̞̙̟̪͋͌͑͐̎̅̏̎̎ d̸̷̸̪̖̠̠̞̙̟̗̝̝̫̅̅̍͌͐͊̅̏eg̸̪̩̙̖̪̫̗̝̖̩̩̗̝̞̙̪̝͑̎͌͌̍͐͋͐͋̅̏̅ȑ̷̵̪̪̖̘̠̘̗̫͒͌͊͋̍̎̏͋̎̎̅adati̶̸̘̘̝̝̙̘̫̝̪̞͊͐͌͒̅͊o̷̷̗̙̫̞̞̠̖̟̞̪̗̫̖̘̟͒͑̍͊̎͊̅̏͒̎͐͊͊͒͒n d̸̵̠̘̜̠̙̙͋͌͊͋͋et̶̵̪̠̟̫̟̖̩̙̟̫̅̎̎͒͑͑e̵̟̙̝̪̪̗̎͌͐ct̷̝̖̖̪̎͐ed in trans̪mis̠̙̫͑͑̅sion̵̘̙̪̫̙̟̜͑̎͑͊̏͐̎
+
+
+  <span class="dim"># Dense pool + spike — thick center impact</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;The weight of it all&quot; --pool dense --pattern spike --intensity 20 --seed 42</span>
+  Th̶̡̠͆̅e̲̠̲̽̐̍̽ w̵̥̲̦̲̦̱͆̏̅̅̿̽̿̾̐͆e̵̵̢̡̡̳̦̦̱̤̅̎̅̎̽̏i̶̸̵̡̳̥̠̠̠̦̲̤̠̤̳̥̾̿̾̎̅̎̎̍͆̿̎̽̏͆̐̎̎̽̎g̶̴̵̴̢̳̲̲̠̲̳̠̾̾̐̎̽̍̏̐͆̿̎̐̍͆̿̎̽̽̍̾̐̿h̵̵̢̡̢̢̡̡̡̦̠̦̳̲̠̱̳̦̥̲̲̠̤̾̍̐̐̎̿̏̍̐̾̍̎͆̽̏̐̍t̸̸̸̸̡̡̢̡̢̲̥̤̠̤̳̲̥̤̳̳̦̱̳̦̥̱̠̾͆̅̏̏̿̎̍̐̏̎̎͆̏̿̐̅ o̵̵̷̢̢̡̢̡̢̱̠̥̳̳̠̳̲̲̤̲̱̦̳̦̠̲̍͆̅̍̽̾̎̍͆̎̽̽̏̽̐͆̍̾f̷̵̷̶̡̤̠̠̲̳̥̲̦̍̅̐̎̽̾̍̽̎̐͆̿̅̏̎̅̾ i̸̶̡̢̢̦̳̲̳̲̲̠̱̳̲̲̲̿̿͆̍̎̅̿ț̸̢̡̡̢̤̳̥̳̳̳̠̿̎̿̐̎̿̎̅̍̎̿ a̵̱̠̳̽̐̏̽l̴̢̢̦̾̏l
+
+
+  <span class="dim"># Full pool + sparse + extreme — rare alien artifacts</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Strange symbols appear in the manuscript&quot; --pool full --prob 0.15 --style extreme --seed 42</span>
+  St̸̸̛᪸᪽᷊᷈ᷡ̊ͩ̃̾᪳̃᷅̾ᷗ̀ᷗ͗̒⃖͗⃣̧ᫀ͕⃭̹͖͚̙̩̭̝̩̟̬̳̳̬⃨᫃ᫀ̤̤̹⃯͖̩̘̯ᷧ᫉ᷩ᫁ᷫ᫇᫂᫉᫂᫆ᷪᫍrange symbols appear in⃥̡᪶᫃̠͈⃬̫͎̥̮ᫀ̣͕͔̖̰̗̯̜⃬̞͍̝ᷕͩ̇ͥ⃡⃗ᷝ́᷉ᷰᷬᷯᷬ᫂ᫌᫍᷬᷩᷬᫌᫌ᷼᷍ͅ the manuscript
+
+
+  <span class="dim"># Classic + sparse + crescendo — corruption spreading</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;It starts slow then consumes everything&quot; --pool classic --prob 0.5 --pattern crescendo --intensity 25 --seed 42</span>
+  It start̴̘s ş̑ͪl̶͙̱͇ò̴̡͎̤̚͟w̨̩̠̣ͅ the̴͇͖̗̦̣̠ͭ̽͋͝n cơ̷̵̛̲̝̝̬̘̯̘̫̙̩͈̰̾̀ͣ̾̚nsǔ̷̵̶̵̝͇̰̲̝̝̼̱̱̖̦̖ͩ̓ͥ̽͡͠ͅmes̵̴̶̵̷̷̴̶̡̧̡̡͔͕̫̠̱̻̠̥͈̬̰̜̙̉̇̎ e̴̷̴̴̵̢̗͙̯̯̳̬̥̫̤̬̲̘͊̎ͧ̿͗̊͐͊ͭ̊́̚̕ͅveryth̪̝̲̮̆ͭ͗ͪͮ̽͏̷̴̷̴̴̸̴̵̸̡̢̢̠̼͓̟̜̫̳̰̠̺̪̥̑ͫ̀̆̀̓͞ͅi̡̗̝̩͎͈͚͉̞ͮͮ̈ͧ̑̓ͭ̀ͨ̎̌̋̽̓͜͡͡͏̶̵̵̶̖̫̤̖̣̻̲̫̖̙̱̳̝̜̥̈́́̽̓̈́̀̚ng
+
+
+  <span class="dim"># Geometric + pulse + max-marks — controlled glitch art</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Error error normal error error&quot; --pool geometric --pattern pulse --max-marks 6 --intensity 30 --seed 42</span>
+  E̪̗̎͐͌r̟̞͋̅̍r̷̜̗̫̅͑o̷̞̫͑͌͑r̞̠̖͌͑ e̷̜̜̎̍̎r̘̠̗̜͌͌r̘̖͌͑͐o̶̟̜̪͒͑r̸̜̘͋̎͋ n̸̝̖̅̍͌o̵̠̠̞͒͑r̸̙̞͊͊͒m̷̗̩̞̎͌ȁ̸̩̙̅͒l̵̩̩̗̅͊ e̷̠̘͑͊̎r̵̘̜̟͊͋r̪̪͌̎o̫̞̝̩̎̍r̠̫͊͊͊͐ e̵̝̝̙͑̎r̵̫̪̫͑͋r̵̜̫͊̎͊o̸̞̠̗͊͒r̵̟̞̪͋͐
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ FILE OUTPUT ━━━</span></span>
+
+  <span class="dim"># Write to file with -o</span>
+  <span class="fg-cyan">$ ./zalgoctl encode &quot;Saved to disk&quot; --intensity 10 --seed 42 -o /var/folders/cl/224s_dpn6_n0ptf3qp67zq6h0000gn/T/tmp.P11g6yqM9K &amp;&amp; echo &quot;Written to /var/folders/cl/224s_dpn6_n0ptf3qp67zq6h0000gn/T/tmp.P11g6yqM9K&quot; &amp;&amp; cat /var/folders/cl/224s_dpn6_n0ptf3qp67zq6h0000gn/T/tmp.P11g6yqM9K</span>
+  Written to /var/folders/cl/224s_dpn6_n0ptf3qp67zq6h0000gn/T/tmp.P11g6yqM9K
+Š̡̛̯̱͉̖͉̻̦͑ͪ̄́̌̀́̊͘͞a̸̢͍̳͎̱̼̘̤̅̅ͧ͊ͥ͂͘͢͝v̨̹̲̟̟̏͋̔̔̋̎͢ͅḛ̷̶̡̣̱͔̩͚̮̜̘̜͑ͧͣ̌́̑̎̋ͬͩ̑͐ͫ̾̕d̵̫͖͓̣̮̟͕͓̥̃̔ͯ͂ͮͨ̀͗͑͂̎͜͞ t̴͖̙̭̙͇͇̝͛͂ͣ͂̀̑́ͬͩͦ̐͡ơ̵̡̢̡̢̦̱̙̳ͨ̋͂̋̑ͯ͌̽͘͝ d̢̛̛̜̩̦͎̠̍͐̋̇ͬ̈́̾ͤͥ̊̅̾͟͟͢i̡̨̟̭̩̘͚̣̍ͫ̽ͨ̓̂ͯͦͮ͢͡s̵̢̢͙̙̠̲̺̝͔ͭͯ̓͗̈̐ͮ̈́͂͛̃͆̀͡k̴̡̨͚͚̙̣͖͓͓͆́ͬ̋͗̍͐̐̑͛̕͜
+
+
+
+<span class="fg-magenta"><span class="bold">━━━ END ━━━</span></span>
+
+</pre>
+    <footer>
+        <a href="https://github.com/possibilities/zalgoctl">github.com/possibilities/zalgoctl</a>
+    </footer>
+</body>
+</html>
+
