@@ -1,5 +1,7 @@
 # zalgoctl
 
+[![PyPI](https://img.shields.io/pypi/v/zalgoctl)](https://pypi.org/project/zalgoctl/)
+
 A Zalgo text generator CLI.
 
 ## Usage
