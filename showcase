@@ -203,6 +203,31 @@ demo "all blocks combined — maximum variety" \
 demo "mix specific blocks" \
     "$ZALGO" encode '"Core plus symbols"' --blocks core --blocks symbols --intensity 10 --seed "$SEED"
 
+# ── mark pools ──────────────────────────────────────────────────────────────
+
+section "MARK POOLS"
+
+demo "classic — matches traditional Zalgo generators (dense, chaotic)" \
+    "$ZALGO" encode '"The old ways"' --pool classic --intensity 10 --seed "$SEED"
+
+demo "curated — selective core marks (clean, reliable)" \
+    "$ZALGO" encode '"Refined corruption"' --pool curated --intensity 10 --seed "$SEED"
+
+demo "dense — heavy stacking marks (thick, crossed-out)" \
+    "$ZALGO" encode '"Obliterated"' --pool dense --intensity 10 --seed "$SEED"
+
+demo "geometric — lines, arrows, angular marks (glitch aesthetic)" \
+    "$ZALGO" encode '"System error"' --pool geometric --intensity 10 --seed "$SEED"
+
+demo "full — all Unicode combining blocks (maximum variety)" \
+    "$ZALGO" encode '"Everything everywhere"' --pool full --intensity 10 --seed "$SEED"
+
+demo "pool + style combo — classic pool with heavy style" \
+    "$ZALGO" encode '"Old school chaos"' --pool classic --style heavy --seed "$SEED"
+
+demo "pool + pattern combo — geometric pool with pulse" \
+    "$ZALGO" encode '"Glitch pulse glitch pulse"' --pool geometric --pattern pulse --intensity 15 --seed "$SEED"
+
 # ── mark filters ─────────────────────────────────────────────────────────────
 
 section "MARK FILTERS"
@@ -246,6 +271,31 @@ demo "Only ASCII letters" \
 
 demo "All filters combined" \
     "$ZALGO" encode '"Hello, World! 42 is the answer."' --skip-punct --skip-numbers --only-ascii --intensity 10 --seed "$SEED"
+
+# ── probability (sparse corruption) ─────────────────────────────────────────
+
+section "PROBABILITY (SPARSE CORRUPTION)"
+
+demo "100% probability (default) — every character affected" \
+    "$ZALGO" encode '"All characters corrupted"' --prob 1.0 --intensity 10 --seed "$SEED"
+
+demo "50% probability — half the characters affected" \
+    "$ZALGO" encode '"Half the characters corrupted"' --prob 0.5 --intensity 10 --seed "$SEED"
+
+demo "25% probability — sparse corruption" \
+    "$ZALGO" encode '"Sparse scattered corruption through text"' --prob 0.25 --intensity 10 --seed "$SEED"
+
+demo "10% probability — occasional glitches" \
+    "$ZALGO" encode '"Mostly clean with occasional glitches here and there"' --prob 0.1 --intensity 15 --seed "$SEED"
+
+demo "35% probability — the classic Python recipe" \
+    "$ZALGO" encode '"He comes"' --pool classic --prob 0.35 --intensity 10 --seed "$SEED"
+
+demo "Sparse + high intensity — rare but intense" \
+    "$ZALGO" encode '"When it hits it hits hard"' --prob 0.2 --intensity 40 --seed "$SEED"
+
+demo "Sparse + pattern — fade-in with 30% probability" \
+    "$ZALGO" encode '"Building dread through scattered marks"' --prob 0.3 --pattern fade-in --intensity 20 --seed "$SEED"
 
 # ── max marks cap ────────────────────────────────────────────────────────────
 
@@ -335,6 +385,24 @@ demo "Wave + max-marks 4 — controlled waves" \
 
 demo "Crescendo + no-skip-spaces — total corruption" \
     "$ZALGO" encode '"Nothing is safe"' --pattern crescendo --intensity 20 --no-skip-spaces --seed "$SEED"
+
+demo "Classic pool + heartbeat — old school pulse" \
+    "$ZALGO" encode '"The ancient heart still beats"' --pool classic --pattern heartbeat --intensity 15 --seed "$SEED"
+
+demo "Geometric pool + wave + sparse — glitch transmission" \
+    "$ZALGO" encode '"Signal degradation detected in transmission"' --pool geometric --pattern wave --prob 0.4 --intensity 12 --seed "$SEED"
+
+demo "Dense pool + spike — thick center impact" \
+    "$ZALGO" encode '"The weight of it all"' --pool dense --pattern spike --intensity 20 --seed "$SEED"
+
+demo "Full pool + sparse + extreme — rare alien artifacts" \
+    "$ZALGO" encode '"Strange symbols appear in the manuscript"' --pool full --prob 0.15 --style extreme --seed "$SEED"
+
+demo "Classic + sparse + crescendo — corruption spreading" \
+    "$ZALGO" encode '"It starts slow then consumes everything"' --pool classic --prob 0.5 --pattern crescendo --intensity 25 --seed "$SEED"
+
+demo "Geometric + pulse + max-marks — controlled glitch art" \
+    "$ZALGO" encode '"Error error normal error error"' --pool geometric --pattern pulse --max-marks 6 --intensity 30 --seed "$SEED"
 
 # ── file output ──────────────────────────────────────────────────────────────
 
