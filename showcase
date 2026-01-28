@@ -30,8 +30,8 @@ demo() {
 
 # ── intro ────────────────────────────────────────────────────────────────────
 
-printf '%b\n' "$BOLD"
-cat <<'BANNER'
+printf '%b' "$BOLD$MAGENTA"
+$ZALGOCTL --style subtle --seed $SEED << 'BANNER'
  ______     _
 |__  / |__ | | __ _  ___
   / /| '_ \| |/ _` |/ _ \
@@ -40,7 +40,8 @@ cat <<'BANNER'
               |___/
 BANNER
 printf '%b' "$RESET"
-printf '%bShowcase — every feature demonstrated%b\n' "$DIM" "$RESET"
+echo "Showcase - every feature demonstrated" | $ZALGOCTL --style whisper --seed $SEED
+printf '\n'
 
 # ── basics ───────────────────────────────────────────────────────────────────
 
