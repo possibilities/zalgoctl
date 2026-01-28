@@ -1,0 +1,350 @@
+#!/usr/bin/env bash
+# Showcase script for the zalgo CLI
+set -euo pipefail
+
+ZALGO="$(dirname "$0")/zalgo"
+SEED=42  # reproducible demos
+
+# ── helpers ──────────────────────────────────────────────────────────────────
+
+BOLD='\033[1m'
+DIM='\033[2m'
+CYAN='\033[36m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+MAGENTA='\033[35m'
+RESET='\033[0m'
+
+section() {
+    printf '\n%b━━━ %s ━━━%b\n\n' "$MAGENTA$BOLD" "$1" "$RESET"
+}
+
+demo() {
+    local desc="$1"; shift
+    printf '  %b# %s%b\n' "$DIM" "$desc" "$RESET"
+    printf '  %b$ %s%b\n' "$CYAN" "$*" "$RESET"
+    printf '  '
+    eval "$@" 2>&1
+    printf '\n\n'
+}
+
+# ── intro ────────────────────────────────────────────────────────────────────
+
+printf '%b\n' "$BOLD"
+cat <<'BANNER'
+ ______     _
+|__  / |__ | | __ _  ___
+  / /| '_ \| |/ _` |/ _ \
+ / /_| | | | | (_| | (_) |
+/____|_| |_|_|\__, |\___/
+              |___/
+BANNER
+printf '%b' "$RESET"
+printf '%bShowcase — every feature demonstrated%b\n' "$DIM" "$RESET"
+
+# ── basics ───────────────────────────────────────────────────────────────────
+
+section "BASICS"
+
+demo "Default encode (moderate intensity)" \
+    "$ZALGO" encode '"Hello World"' --seed "$SEED"
+
+demo "Pipe text through stdin" \
+    "echo 'He comes' | $ZALGO --seed $SEED"
+
+demo "Encode is the default subcommand" \
+    "$ZALGO" '"The abyss stares back"' --seed "$SEED"
+
+# ── style presets ────────────────────────────────────────────────────────────
+
+section "STYLE PRESETS"
+
+demo "whisper — barely there" \
+    "$ZALGO" encode '"Whisper in the dark"' --style whisper --seed "$SEED"
+
+demo "subtle — readable but eerie" \
+    "$ZALGO" encode '"Something is wrong"' --style subtle --seed "$SEED"
+
+demo "moderate — classic Zalgo (default)" \
+    "$ZALGO" encode '"He waits behind the wall"' --style moderate --seed "$SEED"
+
+demo "heavy — serious corruption" \
+    "$ZALGO" encode '"The door is opening"' --style heavy --seed "$SEED"
+
+demo "extreme — full chaos" \
+    "$ZALGO" encode '"Fear me"' --style extreme --seed "$SEED"
+
+demo "demonic — screen-destroying" \
+    "$ZALGO" encode '"Obey"' --style demonic --seed "$SEED"
+
+demo "void — the abyss stares back" \
+    "$ZALGO" encode '"End"' --style void --seed "$SEED"
+
+# ── directional presets ──────────────────────────────────────────────────────
+
+section "DIRECTIONAL PRESETS"
+
+demo "up-only — reaching skyward" \
+    "$ZALGO" encode '"Rising"' --style up-only --seed "$SEED"
+
+demo "down-only — melting downward" \
+    "$ZALGO" encode '"Sinking"' --style down-only --seed "$SEED"
+
+demo "mid-only — in-place corruption" \
+    "$ZALGO" encode '"Corrupted"' --style mid-only --seed "$SEED"
+
+demo "ascend — heavy up, light down" \
+    "$ZALGO" encode '"Ascending"' --style ascend --seed "$SEED"
+
+demo "descend — light up, heavy down" \
+    "$ZALGO" encode '"Descending"' --style descend --seed "$SEED"
+
+# ── manual intensity ─────────────────────────────────────────────────────────
+
+section "MANUAL INTENSITY CONTROL"
+
+demo "Set all directions with --intensity" \
+    "$ZALGO" encode '"Uniform chaos"' --intensity 15 --seed "$SEED"
+
+demo "Only above marks" \
+    "$ZALGO" encode '"Sky high"' --up 20 --mid 0 --down 0 --seed "$SEED"
+
+demo "Only below marks" \
+    "$ZALGO" encode '"Underground"' --up 0 --mid 0 --down 20 --seed "$SEED"
+
+demo "Only middle overlays" \
+    "$ZALGO" encode '"Overwritten"' --up 0 --mid 15 --down 0 --seed "$SEED"
+
+demo "Override a preset (heavy + no middle)" \
+    "$ZALGO" encode '"Heavy but clean"' --style heavy --mid 0 --seed "$SEED"
+
+demo "Minimum intensity" \
+    "$ZALGO" encode '"Barely touched"' --up 1 --mid 0 --down 1 --variance 0 --seed "$SEED"
+
+demo "Maximum intensity" \
+    "$ZALGO" encode '"Max"' --up 100 --mid 10 --down 100 --seed "$SEED"
+
+# ── variance ─────────────────────────────────────────────────────────────────
+
+section "VARIANCE CONTROL"
+
+demo "Zero variance — perfectly uniform marks per char" \
+    "$ZALGO" encode '"Uniform uniform uniform"' --intensity 8 --variance 0 --seed "$SEED"
+
+demo "Full variance — wildly different per char" \
+    "$ZALGO" encode '"Chaos chaos chaos"' --intensity 8 --variance 1.0 --seed "$SEED"
+
+# ── patterns ─────────────────────────────────────────────────────────────────
+
+section "PATTERN MODES"
+
+demo "wave — sinusoidal intensity" \
+    "$ZALGO" encode '"The wave rolls through the darkness"' --pattern wave --intensity 20 --seed "$SEED"
+
+demo "fade-in — builds from nothing" \
+    "$ZALGO" encode '"Growing horror approaches"' --pattern fade-in --intensity 25 --seed "$SEED"
+
+demo "fade-out — dissolves to nothing" \
+    "$ZALGO" encode '"Fading into silence"' --pattern fade-out --intensity 25 --seed "$SEED"
+
+demo "pulse — square wave on/off" \
+    "$ZALGO" encode '"On and off and on and off"' --pattern pulse --intensity 15 --seed "$SEED"
+
+demo "crescendo — exponential ramp up" \
+    "$ZALGO" encode '"Slowly then all at once"' --pattern crescendo --intensity 30 --seed "$SEED"
+
+demo "decrescendo — exponential ramp down" \
+    "$ZALGO" encode '"Overwhelming then calm"' --pattern decrescendo --intensity 30 --seed "$SEED"
+
+demo "spike — peak in the center" \
+    "$ZALGO" encode '"The center cannot hold"' --pattern spike --intensity 25 --seed "$SEED"
+
+demo "sawtooth — repeating ramp" \
+    "$ZALGO" encode '"Again and again and again"' --pattern sawtooth --intensity 20 --seed "$SEED"
+
+demo "heartbeat — double-beat cardiac rhythm" \
+    "$ZALGO" encode '"Can you hear it beating"' --pattern heartbeat --intensity 25 --seed "$SEED"
+
+# ── wave tuning ──────────────────────────────────────────────────────────────
+
+section "WAVE FREQUENCY & PHASE"
+
+demo "wave with 2x frequency — faster oscillation" \
+    "$ZALGO" encode '"Faster faster faster faster"' --pattern wave --wave-freq 2 --intensity 20 --seed "$SEED"
+
+demo "wave with 3x frequency" \
+    "$ZALGO" encode '"Rapid oscillation across text"' --pattern wave --wave-freq 3 --intensity 20 --seed "$SEED"
+
+demo "wave with phase offset (pi/2)" \
+    "$ZALGO" encode '"Shifted starting point"' --pattern wave --wave-phase 1.5708 --intensity 20 --seed "$SEED"
+
+demo "sawtooth with 3x frequency" \
+    "$ZALGO" encode '"Ramp ramp ramp ramp ramp"' --pattern sawtooth --wave-freq 3 --intensity 15 --seed "$SEED"
+
+# ── unicode blocks ───────────────────────────────────────────────────────────
+
+section "UNICODE BLOCKS"
+
+demo "core only (default) — standard combining marks" \
+    "$ZALGO" encode '"Standard marks"' --blocks core --intensity 10 --seed "$SEED"
+
+demo "extended block — rare diacriticals" \
+    "$ZALGO" encode '"Extended marks"' --blocks extended --intensity 10 --seed "$SEED"
+
+demo "supplement block — additional diacriticals" \
+    "$ZALGO" encode '"Supplement marks"' --blocks supplement --intensity 10 --seed "$SEED"
+
+demo "symbols block — marks for symbols" \
+    "$ZALGO" encode '"Symbol marks"' --blocks symbols --intensity 10 --seed "$SEED"
+
+demo "all blocks combined — maximum variety" \
+    "$ZALGO" encode '"Everything at once"' --blocks all --intensity 10 --seed "$SEED"
+
+demo "mix specific blocks" \
+    "$ZALGO" encode '"Core plus symbols"' --blocks core --blocks symbols --intensity 10 --seed "$SEED"
+
+# ── mark filters ─────────────────────────────────────────────────────────────
+
+section "MARK FILTERS"
+
+demo "accents — grave, acute, circumflex, etc." \
+    "$ZALGO" encode '"Accented text"' --marks accents --intensity 8 --seed "$SEED"
+
+demo "dots — dots, rings, diaereses" \
+    "$ZALGO" encode '"Dotted text"' --marks dots --intensity 8 --seed "$SEED"
+
+demo "lines — strokes, overlines, underlines" \
+    "$ZALGO" encode '"Lined text"' --marks lines --intensity 8 --seed "$SEED"
+
+demo "letters — medieval superscript letters" \
+    "$ZALGO" encode '"Ancient text"' --marks letters --up 5 --mid 0 --down 0 --seed "$SEED"
+
+demo "arrows — arrow marks" \
+    "$ZALGO" encode '"Directed"' --marks arrows --up 6 --mid 0 --down 0 --seed "$SEED"
+
+demo "hooks — hooks, horns, cedillas" \
+    "$ZALGO" encode '"Hooked text"' --marks hooks --intensity 8 --seed "$SEED"
+
+# ── character filtering ──────────────────────────────────────────────────────
+
+section "CHARACTER FILTERING"
+
+demo "Default: spaces are skipped" \
+    "$ZALGO" encode '"Spaces are clean"' --intensity 10 --seed "$SEED"
+
+demo "No skip spaces — corrupt everything" \
+    "$ZALGO" encode '"Spaces are dirty"' --no-skip-spaces --intensity 10 --seed "$SEED"
+
+demo "Skip punctuation" \
+    "$ZALGO" encode '"Hello, World! How are you?"' --skip-punct --intensity 10 --seed "$SEED"
+
+demo "Skip numbers" \
+    "$ZALGO" encode '"Agent 007 reporting at 0900"' --skip-numbers --intensity 10 --seed "$SEED"
+
+demo "Only ASCII letters" \
+    "$ZALGO" encode '"cafe 123 ok!"' --only-ascii --intensity 10 --seed "$SEED"
+
+demo "All filters combined" \
+    "$ZALGO" encode '"Hello, World! 42 is the answer."' --skip-punct --skip-numbers --only-ascii --intensity 10 --seed "$SEED"
+
+# ── max marks cap ────────────────────────────────────────────────────────────
+
+section "MAX MARKS CAP"
+
+demo "High intensity, capped to 3 marks per char" \
+    "$ZALGO" encode '"Controlled chaos"' --intensity 50 --max-marks 3 --seed "$SEED"
+
+demo "High intensity, capped to 5 marks per char" \
+    "$ZALGO" encode '"Controlled chaos"' --intensity 50 --max-marks 5 --seed "$SEED"
+
+demo "High intensity, capped to 10 marks per char" \
+    "$ZALGO" encode '"Controlled chaos"' --intensity 50 --max-marks 10 --seed "$SEED"
+
+# ── reproducibility ──────────────────────────────────────────────────────────
+
+section "REPRODUCIBILITY"
+
+demo "Seed 42 — run 1" \
+    "$ZALGO" encode '"Deterministic output"' --intensity 10 --seed 42
+
+demo "Seed 42 — run 2 (identical)" \
+    "$ZALGO" encode '"Deterministic output"' --intensity 10 --seed 42
+
+demo "Seed 99 — different seed, different result" \
+    "$ZALGO" encode '"Deterministic output"' --intensity 10 --seed 99
+
+# ── decode ───────────────────────────────────────────────────────────────────
+
+section "DECODE"
+
+demo "Full decode — strip all combining marks" \
+    "echo 'Round trip:' && $ZALGO encode 'Hello World' --intensity 20 --seed $SEED | $ZALGO decode"
+
+demo "Partial decode — only strip chars with >10 marks" \
+    "$ZALGO" encode '"Threshold test"' --intensity 20 --seed "$SEED" '|' "$ZALGO" decode --threshold 10
+
+demo "Partial decode — only strip chars with >5 marks" \
+    "$ZALGO" encode '"Threshold test"' --intensity 20 --seed "$SEED" '|' "$ZALGO" decode --threshold 5
+
+# ── analyze ──────────────────────────────────────────────────────────────────
+
+section "ANALYZE"
+
+demo "Analyze whisper-level text" \
+    "$ZALGO" encode '"Analyze me"' --style whisper --seed "$SEED" '|' "$ZALGO" analyze
+
+demo "Analyze heavy-level text" \
+    "$ZALGO" encode '"Analyze me"' --style heavy --seed "$SEED" '|' "$ZALGO" analyze
+
+demo "Analyze extreme-level text" \
+    "$ZALGO" encode '"Analyze me"' --style extreme --seed "$SEED" '|' "$ZALGO" analyze
+
+demo "Analyze clean text (no Zalgo)" \
+    "echo 'Plain text' | $ZALGO analyze"
+
+# ── creative combos ──────────────────────────────────────────────────────────
+
+section "CREATIVE COMBINATIONS"
+
+demo "Heartbeat + heavy — eldritch pulse" \
+    "$ZALGO" encode '"The heart of darkness beats"' --style heavy --pattern heartbeat --seed "$SEED"
+
+demo "Wave + demonic — rolling madness" \
+    "$ZALGO" encode '"Waves of insanity"' --style demonic --pattern wave --seed "$SEED"
+
+demo "Crescendo + extreme + extended blocks" \
+    "$ZALGO" encode '"The horror builds"' --style extreme --pattern crescendo --blocks all --seed "$SEED"
+
+demo "Spike + void — center of the storm" \
+    "$ZALGO" encode '"The eye sees all"' --style void --pattern spike --seed "$SEED"
+
+demo "Fade-in + letters only — ancient text appearing" \
+    "$ZALGO" encode '"The ancient words appear"' --pattern fade-in --marks letters --up 8 --mid 0 --down 0 --seed "$SEED"
+
+demo "Sawtooth + dots — dotted rhythm" \
+    "$ZALGO" encode '"dot dot dot dot dot dot"' --pattern sawtooth --marks dots --intensity 12 --wave-freq 3 --seed "$SEED"
+
+demo "Decrescendo + lines — fading strikethrough" \
+    "$ZALGO" encode '"Vanishing text"' --pattern decrescendo --marks lines --intensity 20 --seed "$SEED"
+
+demo "Pulse + up-only — intermittent ascension" \
+    "$ZALGO" encode '"Up and down and up and down"' --style up-only --pattern pulse --seed "$SEED"
+
+demo "Wave + max-marks 4 — controlled waves" \
+    "$ZALGO" encode '"Smooth controlled waves"' --pattern wave --intensity 30 --max-marks 4 --seed "$SEED"
+
+demo "Crescendo + no-skip-spaces — total corruption" \
+    "$ZALGO" encode '"Nothing is safe"' --pattern crescendo --intensity 20 --no-skip-spaces --seed "$SEED"
+
+# ── file output ──────────────────────────────────────────────────────────────
+
+section "FILE OUTPUT"
+
+TMPFILE=$(mktemp)
+demo "Write to file with -o" \
+    "$ZALGO" encode '"Saved to disk"' --intensity 10 --seed "$SEED" -o "$TMPFILE" '&& echo "Written to '"$TMPFILE"'" && cat '"$TMPFILE"''
+rm -f "$TMPFILE"
+
+# ── done ─────────────────────────────────────────────────────────────────────
+
+printf '\n%b━━━ END ━━━%b\n\n' "$MAGENTA$BOLD" "$RESET"
