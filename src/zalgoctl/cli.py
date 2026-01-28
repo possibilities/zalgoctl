@@ -1,8 +1,3 @@
-#!/usr/bin/env -S uv run --script
-# /// script
-# requires-python = ">=3.12"
-# dependencies = ["click>=8.0"]
-# ///
 """The best damn Zalgo text generator on the planet."""
 
 import json
@@ -505,7 +500,7 @@ class DefaultGroup(click.Group):
 
 
 @click.group(cls=DefaultGroup, default_cmd="encode", invoke_without_command=True)
-@click.version_option("1.0.0", prog_name="zalgoctl")
+@click.version_option(prog_name="zalgoctl")
 def cli():
     """He comes. The best damn Zalgo text generator on the planet."""
     pass
